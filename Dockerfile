@@ -1,6 +1,6 @@
 FROM php:7.2-apache
 
-ARG PACKAGE=groupoffice-com-6.3.4-php-7.1
+ARG PACKAGE=groupoffice-com-6.3.5-php-7.1
 
 ENV MYSQL_USER groupoffice
 ENV MYSQL_PASSWORD groupoffice
