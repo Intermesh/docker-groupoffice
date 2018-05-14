@@ -27,6 +27,7 @@ ADD ./etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/
 RUN sed -i 's/{serverName}/'$APACHE_SERVER_NAME'/' /etc/apache2/sites-available/000-default.conf
 RUN sed -i 's/{serverAdmin}/'$APACHE_SERVER_ADMIN'/' /etc/apache2/sites-available/000-default.conf
 
+RUN mkdir -p /etc/groupoffice/multi_instance && chown www-data:www-data /etc/groupoffice
 #default group-office config
 ADD ./etc/groupoffice/config.ini /etc/groupoffice/config.ini
 
@@ -35,6 +36,7 @@ RUN sed -i 's/{dbName}/'$MYSQL_DATABASE'/' /etc/groupoffice/config.ini
 RUN sed -i 's/{dbUser}/'$MYSQL_PASSWORD'/' /etc/groupoffice/config.ini
 RUN sed -i 's/{dbPass}/'$MYSQL_USER'/' /etc/groupoffice/config.ini
 
+VOLUME /etc/groupoffice
 
 
 #Download package from sourceforge
@@ -55,6 +57,8 @@ RUN tar xvzfC /tmp/ioncube_loaders_lin_x86-64.tar.gz /tmp/ \
 
 RUN echo "zend_extension = /usr/local/ioncube/ioncube_loader_lin_7.2.so" >> /usr/local/etc/php/conf.d/00_ioncube.ini
 
-RUN mkdir /var/lib/groupoffice && chown www-data:www-data /var/lib/groupoffice
+RUN mkdir -p /var/lib/groupoffice/multi_instance && chown www-data:www-data /var/lib/groupoffice
 #Group-Office data:
 VOLUME /var/lib/groupoffice
+
+
