@@ -60,4 +60,8 @@ RUN mkdir -p /var/lib/groupoffice/multi_instance && chown -R www-data:www-data /
 #Group-Office data:
 VOLUME /var/lib/groupoffice
 
+COPY docker-go-entrypoint.sh /usr/local/bin/
+
+CMD ["apache2-foreground"]
+ENTRYPOINT ["docker-go-entrypoint.sh"]
 
