@@ -1,6 +1,6 @@
 FROM php:7.2-apache
 
-ARG PACKAGE=groupoffice-com-6.3.5-php-7.1
+ARG PACKAGE=groupoffice-com-6.3.6-php-7.1
 
 ENV MYSQL_USER groupoffice
 ENV MYSQL_PASSWORD groupoffice
@@ -57,7 +57,7 @@ RUN tar xvzfC /tmp/ioncube_loaders_lin_x86-64.tar.gz /tmp/ \
 
 RUN echo "zend_extension = /usr/local/ioncube/ioncube_loader_lin_7.2.so" >> /usr/local/etc/php/conf.d/00_ioncube.ini
 
-RUN mkdir -p /var/lib/groupoffice/multi_instance && chown www-data:www-data /var/lib/groupoffice
+RUN mkdir -p /var/lib/groupoffice/multi_instance && chown -R www-data:www-data /var/lib/groupoffice
 #Group-Office data:
 VOLUME /var/lib/groupoffice
 
