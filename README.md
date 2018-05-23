@@ -43,11 +43,11 @@ volumes:
 
 And put "db.env" in the same folder with the passwords:
 
-`````````````````````
+``````````````````````````
 MYSQL_USER=groupoffice
 MYSQL_PASSWORD=groupoffice
 MYSQL_DATABASE=groupoffice
-````````````````````
+``````````````````````````
 
 Run this command in the folder where these files are to start the containers:
 
