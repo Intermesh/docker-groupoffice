@@ -79,6 +79,6 @@ Running a 6.2 group-office container:
 4. Create a "etc/groupoffice" directory with empty config.php file in it (~/Projects/docker-groupoffice-6.2/etc/groupoffice:/etc/groupoffice)
 5. Run this command to start:
 
-````````
+```
 docker run --name groupoffice-62 -d -p 6280:80 -v ~/Projects/docker-groupoffice-6.2/data:/var/lib/groupoffice -v ~/Projects/groupoffice-6.2/www:/usr/local/share/groupoffice -v ~/Projects/docker-groupoffice-6.2/etc/groupoffice:/etc/groupoffice --link go_db:db intermesh/groupoffice
-''''''''
+```
