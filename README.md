@@ -57,6 +57,21 @@ docker-compose up -d
 
 Then launch your browser to http://localhost:8004 and the Group-Office installer should appear.
 
+### Upgrading
+Pull the lastest image:
+
+```
+docker pull intermesh/groupoffice
+```
+Navigate in the folder with docker-compose.yml and bring the containers down:
+```
+docker-compose down
+```
+Then start them again:
+```
+docker-compose up -d
+```
+Then run http://localhost:8004/upgrade.php
 
 Using docker cli:
 ------------------------
