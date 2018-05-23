@@ -1,0 +1,27 @@
+version: "3.1"
+services:
+  groupoffice:
+    image: intermesh/groupoffice
+    restart: always
+    ports:
+      - "8004:80"
+    links:
+      - db
+    volumes:
+      - "godata:/var/lib/groupoffice:cached"
+      - "goetc:/etc/groupoffice:cached"
+    env_file:
+      - ./db.env     
+  db:
+    image: mariadb
+    restart: always    
+    env_file:
+      - ./db.env
+    environment:
+      MYSQL_ROOT_PASSWORD: groupoffice
+    volumes:
+      - "dbdata:/var/lib/mysql:cached"
+volumes:
+  godata:
+  goetc:
+  dbdata:
