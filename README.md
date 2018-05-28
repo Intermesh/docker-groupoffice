@@ -73,8 +73,24 @@ docker-compose up -d
 ```
 Then run http://localhost:8004/upgrade.php
 
-Using docker cli:
-------------------------
+SSL Certificates
+----------------
+
+SSL is enabled by default but it uses a self-signed certificate. You can use
+a real certificate by mounting /etc/ssl/groupoffice.
+
+Put your certificates there and the /etc/apache2/sites-enabled/000-default.conf will
+include a config file /etc/ssl/groupoffice/apache.conf. You can put the SSL directives in that file.
+For example:
+
+```
+SSLCertificateKeyFile /etc/ssl/groupoffice/certificate.key
+SSLCertificateFile /etc/ssl/groupoffice/certificate.crt
+SSLCertificateChainFile /etc/ssl/groupoffice/cabundle.crt
+```
+
+Using docker cli
+----------------
 
 1. Create a "data" directory (eg. ~/Projects/docker-groupoffice-6.2/data)
 2. Setup a database container that's on the default network
@@ -85,8 +101,8 @@ docker run --name groupoffice -d -p 6380:80 -v ~/Projects/docker-groupoffice-6.3
 ````
 
 
-Running a 6.2 group-office container:
--------------------------------------
+Running a 6.2 group-office container
+------------------------------------
 
 1. Create a "data" directory (eg. ~/Projects/docker-groupoffice-6.2/data)
 2. Setup a database container that's on the default network
