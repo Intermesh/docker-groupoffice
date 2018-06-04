@@ -1,6 +1,6 @@
 FROM php:7.2-apache
 
-ARG PACKAGE=groupoffice-com-6.3.7-php-7.1
+ARG PACKAGE=groupoffice-6.3.10-php-71
 
 ENV MYSQL_USER groupoffice
 ENV MYSQL_PASSWORD groupoffice
@@ -34,21 +34,21 @@ RUN sed -i 's/{serverAdmin}/'$APACHE_SERVER_ADMIN'/' /etc/apache2/sites-availabl
 
 RUN mkdir -p /etc/groupoffice/multi_instance && chown www-data:www-data /etc/groupoffice
 #default group-office config
-ADD ./etc/groupoffice/config.ini /etc/groupoffice/config.ini
+ADD ./etc/groupoffice/config.php /etc/groupoffice/config.php
 
-RUN sed -i 's/{dbHost}/'$MYSQL_HOST'/' /etc/groupoffice/config.ini
-RUN sed -i 's/{dbName}/'$MYSQL_DATABASE'/' /etc/groupoffice/config.ini
-RUN sed -i 's/{dbUser}/'$MYSQL_PASSWORD'/' /etc/groupoffice/config.ini
-RUN sed -i 's/{dbPass}/'$MYSQL_USER'/' /etc/groupoffice/config.ini
+RUN sed -i 's/{dbHost}/'$MYSQL_HOST'/' /etc/groupoffice/config.php
+RUN sed -i 's/{dbName}/'$MYSQL_DATABASE'/' /etc/groupoffice/config.php
+RUN sed -i 's/{dbUser}/'$MYSQL_PASSWORD'/' /etc/groupoffice/config.php
+RUN sed -i 's/{dbPass}/'$MYSQL_USER'/' /etc/groupoffice/config.php
 
 VOLUME /etc/groupoffice
 
 
 #Download package from sourceforge
-ADD https://iweb.dl.sourceforge.net/project/group-office/6.3/$PACKAGE-BETA.tar.gz /tmp/
-#COPY /groupoffice-com-6.3.3-php-7.1-BETA.tar.gz /tmp/
-RUN tar zxvfC /tmp/$PACKAGE-BETA.tar.gz /tmp/ \
-    && rm /tmp/$PACKAGE-BETA.tar.gz \
+ADD https://iweb.dl.sourceforge.net/project/group-office/6.3/$PACKAGE.tar.gz /tmp/
+#COPY /groupoffice-com-6.3.3-php-71.tar.gz /tmp/
+RUN tar zxvfC /tmp/$PACKAGE.tar.gz /tmp/ \
+    && rm /tmp/$PACKAGE.tar.gz \
     && mv /tmp/$PACKAGE /usr/local/share/groupoffice
 
 #Install ioncube
