@@ -70,4 +70,3 @@ COPY docker-go-entrypoint.sh /usr/local/bin/
 
 CMD ["apache2-foreground"]
 ENTRYPOINT ["docker-go-entrypoint.sh"]
-
