@@ -41,7 +41,8 @@ RUN sed -i 's/{dbName}/'$MYSQL_DATABASE'/' /etc/groupoffice/config.php
 RUN sed -i 's/{dbUser}/'$MYSQL_PASSWORD'/' /etc/groupoffice/config.php
 RUN sed -i 's/{dbPass}/'$MYSQL_USER'/' /etc/groupoffice/config.php
 
-VOLUME /etc/groupoffice
+#For persistant multi instances
+VOLUME /etc/groupoffice/multi_instance
 
 
 #Download package from sourceforge
