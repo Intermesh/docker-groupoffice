@@ -61,7 +61,7 @@ Then launch your browser to http://localhost:8004 and the Group-Office installer
 Pull the lastest image:
 
 ```
-docker pull intermesh/groupoffice
+docker-compose pull
 ```
 Navigate in the folder with docker-compose.yml and bring the containers down:
 ```
