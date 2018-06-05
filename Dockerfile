@@ -7,8 +7,8 @@ ENV MYSQL_PASSWORD groupoffice
 ENV MYSQL_DATABASE groupoffice
 ENV MYSQL_HOST db
 
-ENV APACHE_SERVER_NAME localhost
-ENV APACHE_SERVER_ADMIN admin@localhost
+#ENV APACHE_SERVER_NAME localhost
+#ENV APACHE_SERVER_ADMIN admin@localhost
 
 EXPOSE 80
 EXPOSE 443
@@ -29,17 +29,12 @@ COPY ./etc/php.ini /usr/local/etc/php/
 
 #configure apache
 ADD ./etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf
-RUN sed -i 's/{serverName}/'$APACHE_SERVER_NAME'/' /etc/apache2/sites-available/000-default.conf
-RUN sed -i 's/{serverAdmin}/'$APACHE_SERVER_ADMIN'/' /etc/apache2/sites-available/000-default.conf
+#RUN sed -i 's/{serverName}/'$APACHE_SERVER_NAME'/' /etc/apache2/sites-available/000-default.conf
+#RUN sed -i 's/{serverAdmin}/'$APACHE_SERVER_ADMIN'/' /etc/apache2/sites-available/000-default.conf
 
-RUN mkdir -p /etc/groupoffice/multi_instance && chown www-data:www-data /etc/groupoffice
+RUN mkdir -p /etc/groupoffice/multi_instance && chown -R www-data:www-data /etc/groupoffice
 #default group-office config
-ADD ./etc/groupoffice/config.php /etc/groupoffice/config.php
-
-RUN sed -i 's/{dbHost}/'$MYSQL_HOST'/' /etc/groupoffice/config.php
-RUN sed -i 's/{dbName}/'$MYSQL_DATABASE'/' /etc/groupoffice/config.php
-RUN sed -i 's/{dbUser}/'$MYSQL_PASSWORD'/' /etc/groupoffice/config.php
-RUN sed -i 's/{dbPass}/'$MYSQL_USER'/' /etc/groupoffice/config.php
+ADD ./etc/groupoffice/config.php.tpl /etc/groupoffice/config.php.tpl
 
 #For persistant multi instances
 VOLUME /etc/groupoffice/multi_instance
