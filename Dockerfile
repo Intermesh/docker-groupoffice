@@ -1,6 +1,6 @@
 FROM php:7.2-apache
 
-ARG PACKAGE=groupoffice-6.3.23-php-71
+ARG PACKAGE=groupoffice-6.3.24-php-71
 
 ENV MYSQL_USER groupoffice
 ENV MYSQL_PASSWORD groupoffice
@@ -17,7 +17,7 @@ RUN apt-get update && \
     apt-get install -y libxml2-dev libpng-dev libfreetype6-dev libjpeg62-turbo-dev zip tnef ssl-cert libldap2-dev&& \
 		docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
 		docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ && \
-    docker-php-ext-install soap pdo pdo_mysql calendar gd sysvshm sysvsem sysvmsg ldap
+    docker-php-ext-install soap pdo pdo_mysql calendar gd sysvshm sysvsem sysvmsg ldap opcache
 #sysvshm sysvsem sysvmsg are for z-push
 
 RUN a2enmod ssl
