@@ -89,6 +89,13 @@ SSLCertificateFile /etc/ssl/groupoffice/certificate.crt
 SSLCertificateChainFile /etc/ssl/groupoffice/cabundle.crt
 ```
 
+Enable debug mode
+-----------------
+You can enable debug mode with this command on the host:
+```
+docker-compose exec groupoffice sed -i "s/config\['debug'\] = false;/config\['debug'\] = true;/" /etc/groupoffice/config.php
+```
+
 Using docker cli
 ----------------
 
