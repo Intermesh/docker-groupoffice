@@ -1,4 +1,4 @@
-FROM php:7.2-apache
+FROM php:7.3-apache
 ARG PACKAGE=groupoffice-6.3.66-php-71
 
 ENV MYSQL_USER groupoffice
@@ -61,7 +61,7 @@ RUN tar xvzfC /tmp/ioncube_loaders_lin_x86-64.tar.gz /tmp/ \
     && cp /tmp/ioncube/ioncube_loader_* /usr/local/ioncube \
     && rm -rf /tmp/ioncube
 
-RUN echo "zend_extension = /usr/local/ioncube/ioncube_loader_lin_7.2.so" >> /usr/local/etc/php/conf.d/00_ioncube.ini
+RUN echo "zend_extension = /usr/local/ioncube/ioncube_loader_lin_7.3.so" >> /usr/local/etc/php/conf.d/00_ioncube.ini
 
 RUN mkdir -p /var/lib/groupoffice/multi_instance && chown -R www-data:www-data /var/lib/groupoffice
 #Group-Office data:
