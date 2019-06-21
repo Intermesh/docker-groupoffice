@@ -46,7 +46,7 @@ VOLUME /etc/groupoffice/multi_instance
 
 
 #Download package from sourceforge
-ADD https://iweb.dl.sourceforge.net/project/group-office/6.3/$PACKAGE.tar.gz /tmp/
+ADD https://iweb.dl.sourceforge.net/project/group-office/6.4/$PACKAGE.tar.gz /tmp/
 #COPY /groupoffice-com-6.3.3-php-71.tar.gz /tmp/
 RUN tar zxvfC /tmp/$PACKAGE.tar.gz /tmp/ \
     && rm /tmp/$PACKAGE.tar.gz \
