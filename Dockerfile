@@ -1,5 +1,5 @@
 FROM php:7.3-apache
-ARG PACKAGE=groupoffice-6.4.92-php-71
+ARG PACKAGE=groupoffice-6.4.93-php-71
 
 ENV MYSQL_USER groupoffice
 ENV MYSQL_PASSWORD groupoffice
