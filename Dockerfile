@@ -1,5 +1,5 @@
 FROM php:7.3-apache
-ARG PACKAGE=groupoffice-6.4.101-php-71
+ARG PACKAGE=groupoffice-6.4.106-php-71
 
 ENV MYSQL_USER groupoffice
 ENV MYSQL_PASSWORD groupoffice
@@ -17,7 +17,7 @@ RUN apt-get update && \
 		catdoc unzip tar imagemagick tesseract-ocr tesseract-ocr-eng poppler-utils exiv2 libzip-dev mariadb-client && \
 		docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
 		docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ && \
-    docker-php-ext-install soap pdo pdo_mysql calendar gd sysvshm sysvsem sysvmsg ldap opcache intl pcntl zip
+    docker-php-ext-install soap pdo pdo_mysql calendar gd sysvshm sysvsem sysvmsg ldap opcache intl pcntl zip bcmath
 
 #sysvshm sysvsem sysvmsg pcntl are for z-push
 
