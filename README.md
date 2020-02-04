@@ -1,7 +1,7 @@
 docker-groupoffice
 ==================
 
-Group-Office is an open source groupware system.
+Group-Office is an open source groupware system. More information can be found at https://www.group-office.com.
 
 I recommend using this with docker-compose.
 
