@@ -1,4 +1,4 @@
-FROM php:7.3-apache
+FROM php:7.4-apache
 ARG PACKAGE=groupoffice-6.4.43-php-71
 
 ENV MYSQL_USER groupoffice
@@ -15,7 +15,7 @@ EXPOSE 443
 RUN apt-get update && \
     apt-get install -y libxml2-dev libpng-dev libfreetype6-dev libjpeg62-turbo-dev zip tnef ssl-cert libldap2-dev \
 		catdoc unzip tar imagemagick tesseract-ocr tesseract-ocr-eng poppler-utils exiv2 libzip-dev mariadb-client && \
-		docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
+		docker-php-ext-configure gd --with-freetype --with-jpeg && \
 		docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ && \
     docker-php-ext-install soap pdo pdo_mysql calendar gd sysvshm sysvsem sysvmsg ldap opcache intl pcntl zip
 
