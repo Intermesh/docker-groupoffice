@@ -1,4 +1,4 @@
-FROM php:7.4-apache
+FROM php:7.3-apache
 ARG PACKAGE=groupoffice-6.4.111-php-71
 
 ENV MYSQL_USER groupoffice
