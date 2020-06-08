@@ -71,7 +71,7 @@ Then start them again:
 ```
 docker-compose up -d
 ```
-Then run http://localhost:8004/upgrade.php
+Then run http://localhost:8004/install/upgrade.php
 
 SSL Certificates
 ----------------
