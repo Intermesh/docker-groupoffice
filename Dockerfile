@@ -1,5 +1,8 @@
-FROM php:7.3-apache
-ARG PACKAGE=groupoffice-6.4.159-php-71
+# Image intermesh/groupoffice
+# docker build -t intermesh/groupoffice
+
+FROM php:7.4-apache
+ARG PACKAGE=groupoffice-6.4.161-php-71
 
 ENV MYSQL_USER groupoffice
 ENV MYSQL_PASSWORD groupoffice
@@ -15,7 +18,7 @@ EXPOSE 443
 RUN apt-get update && \
     apt-get install -y libxml2-dev libpng-dev libfreetype6-dev libjpeg62-turbo-dev zip tnef ssl-cert libldap2-dev \
 		catdoc unzip tar imagemagick tesseract-ocr tesseract-ocr-eng poppler-utils exiv2 libzip-dev mariadb-client && \
-		docker-php-ext-configure gd --with-freetype-dir=/usr --with-jpeg-dir=/usr && \
+		docker-php-ext-configure gd --with-freetype --with-jpeg && \
 		docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ && \
     docker-php-ext-install soap pdo pdo_mysql calendar gd sysvshm sysvsem sysvmsg ldap opcache intl pcntl zip bcmath
 
@@ -61,7 +64,7 @@ RUN tar xvzfC /tmp/ioncube_loaders_lin_x86-64.tar.gz /tmp/ \
     && cp /tmp/ioncube/ioncube_loader_* /usr/local/ioncube \
     && rm -rf /tmp/ioncube
 
-RUN echo "zend_extension = /usr/local/ioncube/ioncube_loader_lin_7.3.so" >> /usr/local/etc/php/conf.d/00_ioncube.ini
+RUN echo "zend_extension = /usr/local/ioncube/ioncube_loader_lin_7.4.so" >> /usr/local/etc/php/conf.d/00_ioncube.ini
 
 RUN mkdir -p /var/lib/groupoffice/multi_instance && chown -R www-data:www-data /var/lib/groupoffice
 #Group-Office data:
