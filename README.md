@@ -9,75 +9,37 @@ I recommend using this with docker-compose.
 Using docker-compose
 --------------------
 
-Create this docker-compose.yml file:
-
-````````````````````
-version: "3.1"
-services:
-  groupoffice:
-    image: intermesh/groupoffice
-    restart: always
-    ports:
-      - "8004:80"
-    links:
-      - db
-    volumes:
-      - "godata:/var/lib/groupoffice:cached"
-      - "goetc:/etc/groupoffice:cached"
-    env_file:
-      - ./db.env     
-  db:
-    image: mariadb
-    restart: always    
-    env_file:
-      - ./db.env
-    environment:
-      MYSQL_ROOT_PASSWORD: groupoffice
-    volumes:
-      - "dbdata:/var/lib/mysql:cached"
-volumes:
-  godata:
-  goetc:
-  dbdata:
-````````````````````
-
-And put "db.env" in the same folder with the passwords:
-
-``````````````````````````
-MYSQL_USER=groupoffice
-MYSQL_PASSWORD=groupoffice
-MYSQL_DATABASE=groupoffice
-``````````````````````````
-
-Run this command in the folder where these files are to start the containers:
+Clone this repository and run from inside the directory:
 
 ````````````````````
 docker-compose up -d
 ````````````````````
 
-Then launch your browser to http://localhost:8004 and the Group-Office installer should appear.
+Then launch your browser to http://localhost:9000 and the Group-Office installer should appear.
 
 ### Upgrading
-Pull the lastest image:
 
+Navigate in the folder with docker-compose.yml and pull the image:
 ```
-docker pull intermesh/groupoffice
+docker-compose pull
 ```
-Navigate in the folder with docker-compose.yml and bring the containers down:
+
+Bring the containers down:
 ```
 docker-compose down
 ```
+
 Then start them again:
 ```
 docker-compose up -d
 ```
-Then run http://localhost:8004/install/upgrade.php
+Then run http://localhost:9000/install/upgrade.php
 
 SSL Certificates
 ----------------
 
 SSL is enabled by default but it uses a self-signed certificate. You can use
-a real certificate by mounting /etc/ssl/groupoffice.
+a real certificate by mounting /etc/ssl/groupoffice. You can find an example in the docker-compose.yml file.
 
 Put your certificates there and the /etc/apache2/sites-enabled/000-default.conf will
 include a config file /etc/ssl/groupoffice/apache.conf. You can put the SSL directives in that file.
@@ -88,6 +50,10 @@ SSLCertificateKeyFile /etc/ssl/groupoffice/certificate.key
 SSLCertificateFile /etc/ssl/groupoffice/certificate.crt
 SSLCertificateChainFile /etc/ssl/groupoffice/cabundle.crt
 ```
+
+Pro licenses
+------------
+In the docker-compose.yml file you find example of how you can put the pro license files in the container with bind mounts.
 
 Enable debug mode
 -----------------
