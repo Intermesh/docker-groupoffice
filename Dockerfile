@@ -2,7 +2,7 @@
 # docker build -t intermesh/groupoffice
 
 FROM php:7.4-apache
-ARG PACKAGE=groupoffice-6.4.164-php-71
+ARG PACKAGE=groupoffice-6.4.165-php-71
 
 ENV MYSQL_USER groupoffice
 ENV MYSQL_PASSWORD groupoffice
