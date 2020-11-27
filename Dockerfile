@@ -2,7 +2,7 @@
 # docker build -t intermesh/groupoffice
 
 FROM php:7.4-apache
-ARG PACKAGE=groupoffice-6.4.191-php-71
+#FROM php:8.0.0RC5-apache-buster
 
 ENV MYSQL_USER groupoffice
 ENV MYSQL_PASSWORD groupoffice
@@ -48,12 +48,7 @@ ADD ./etc/groupoffice/config.php.tpl /etc/groupoffice/config.php.tpl
 VOLUME /etc/groupoffice/multi_instance
 
 
-#Download package from sourceforge
-ADD https://iweb.dl.sourceforge.net/project/group-office/6.4/$PACKAGE.tar.gz /tmp/
-#COPY /groupoffice-com-6.3.3-php-71.tar.gz /tmp/
-RUN tar zxvfC /tmp/$PACKAGE.tar.gz /tmp/ \
-    && rm /tmp/$PACKAGE.tar.gz \
-    && mv /tmp/$PACKAGE /usr/local/share/groupoffice
+
 
 #Install ioncube
 ADD https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz /tmp/
@@ -71,6 +66,15 @@ RUN mkdir -p /var/lib/groupoffice/multi_instance && chown -R www-data:www-data /
 VOLUME /var/lib/groupoffice
 
 COPY docker-go-entrypoint.sh /usr/local/bin/
+
+ARG VERSION=6.4.192
+ARG PACKAGE=groupoffice-$VERSION-php-71
+
+#Download package from GitHub
+ADD https://github.com/Intermesh/groupoffice/releases/download/v$VERSION/$PACKAGE.tar.gz /tmp/
+RUN tar zxvfC /tmp/$PACKAGE.tar.gz /tmp/ \
+    && rm /tmp/$PACKAGE.tar.gz \
+    && mv /tmp/$PACKAGE /usr/local/share/groupoffice
 
 CMD ["apache2-foreground"]
 ENTRYPOINT ["docker-go-entrypoint.sh"]
