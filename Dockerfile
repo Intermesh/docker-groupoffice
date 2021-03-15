@@ -22,6 +22,11 @@ RUN apt-get update && \
 		docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ && \
     docker-php-ext-install soap pdo pdo_mysql calendar gd sysvshm sysvsem sysvmsg ldap opcache intl pcntl zip bcmath
 
+#mem cached
+RUN apt-get install -y libmemcached-dev zlib1g-dev && \
+		yes "" | pecl install memcached && \
+		echo "extension=memcached.so" > /usr/local/etc/php/conf.d/docker-php-ext-memcached.ini
+
 #sysvshm sysvsem sysvmsg pcntl are for z-push
 
 RUN pecl install apcu
