@@ -52,9 +52,6 @@ ADD ./etc/groupoffice/config.php.tpl /etc/groupoffice/config.php.tpl
 #For persistant multi instances
 VOLUME /etc/groupoffice/multi_instance
 
-
-
-
 #Install ioncube
 ADD https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz /tmp/
 
@@ -72,8 +69,11 @@ VOLUME /var/lib/groupoffice
 
 COPY docker-go-entrypoint.sh /usr/local/bin/
 
-ARG VERSION=6.4.228
-ARG PACKAGE=groupoffice-$VERSION-php-71
+ARG VERSION=6.5.35
+#ARG PACKAGE=groupoffice-$VERSION-php-71
+ARG PACKAGE=groupoffice-$VERSION
+
+#https://github.com/Intermesh/groupoffice/releases/download/v6.5.35/groupoffice-6.5.35.tar.gz
 
 #Download package from GitHub
 ADD https://github.com/Intermesh/groupoffice/releases/download/v$VERSION/$PACKAGE.tar.gz /tmp/
