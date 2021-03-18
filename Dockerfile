@@ -1,5 +1,9 @@
-FROM php:7.3-apache
-ARG PACKAGE=groupoffice-6.3.85-php-71
+# Image intermesh/groupoffice
+# docker build -t intermesh/groupoffice:latest .
+
+FROM php:7.4-apache
+#FROM php:8.0.0RC5-apache-buster
+
 
 ENV MYSQL_USER groupoffice
 ENV MYSQL_PASSWORD groupoffice
@@ -14,10 +18,15 @@ EXPOSE 443
 
 RUN apt-get update && \
     apt-get install -y libxml2-dev libpng-dev libfreetype6-dev libjpeg62-turbo-dev zip tnef ssl-cert libldap2-dev \
-		catdoc unzip tar imagemagick tesseract-ocr tesseract-ocr-eng poppler-utils exiv2 libzip-dev && \
-		docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
+		catdoc unzip tar imagemagick tesseract-ocr tesseract-ocr-eng poppler-utils exiv2 libzip-dev mariadb-client && \
+		docker-php-ext-configure gd --with-freetype --with-jpeg && \
 		docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ && \
-    docker-php-ext-install soap pdo pdo_mysql calendar gd sysvshm sysvsem sysvmsg ldap opcache intl pcntl zip
+    docker-php-ext-install soap pdo pdo_mysql calendar gd sysvshm sysvsem sysvmsg ldap opcache intl pcntl zip bcmath
+
+#mem cached
+RUN apt-get install -y libmemcached-dev zlib1g-dev && \
+		yes "" | pecl install memcached && \
+		echo "extension=memcached.so" > /usr/local/etc/php/conf.d/docker-php-ext-memcached.ini
 
 #sysvshm sysvsem sysvmsg pcntl are for z-push
 
@@ -45,12 +54,7 @@ ADD ./etc/groupoffice/config.php.tpl /etc/groupoffice/config.php.tpl
 VOLUME /etc/groupoffice/multi_instance
 
 
-#Download package from sourceforge
-ADD https://iweb.dl.sourceforge.net/project/group-office/6.3/$PACKAGE.tar.gz /tmp/
-#COPY /groupoffice-com-6.3.3-php-71.tar.gz /tmp/
-RUN tar zxvfC /tmp/$PACKAGE.tar.gz /tmp/ \
-    && rm /tmp/$PACKAGE.tar.gz \
-    && mv /tmp/$PACKAGE /usr/local/share/groupoffice
+
 
 #Install ioncube
 ADD https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz /tmp/
@@ -61,13 +65,22 @@ RUN tar xvzfC /tmp/ioncube_loaders_lin_x86-64.tar.gz /tmp/ \
     && cp /tmp/ioncube/ioncube_loader_* /usr/local/ioncube \
     && rm -rf /tmp/ioncube
 
-RUN echo "zend_extension = /usr/local/ioncube/ioncube_loader_lin_7.3.so" >> /usr/local/etc/php/conf.d/00_ioncube.ini
+RUN echo "zend_extension = /usr/local/ioncube/ioncube_loader_lin_7.4.so" >> /usr/local/etc/php/conf.d/00_ioncube.ini
 
 RUN mkdir -p /var/lib/groupoffice/multi_instance && chown -R www-data:www-data /var/lib/groupoffice
 #Group-Office data:
 VOLUME /var/lib/groupoffice
 
 COPY docker-go-entrypoint.sh /usr/local/bin/
+
+ARG VERSION=6.3.98
+ARG PACKAGE=groupoffice-$VERSION-php-71
+
+#Download package from GitHub
+ADD https://github.com/Intermesh/groupoffice/releases/download/v$VERSION/$PACKAGE.tar.gz /tmp/
+RUN tar zxvfC /tmp/$PACKAGE.tar.gz /tmp/ \
+    && rm /tmp/$PACKAGE.tar.gz \
+    && mv /tmp/$PACKAGE /usr/local/share/groupoffice
 
 CMD ["apache2-foreground"]
 ENTRYPOINT ["docker-go-entrypoint.sh"]
