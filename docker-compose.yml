@@ -1,7 +1,7 @@
 version: "3.1"
 services:
   groupoffice:
-    image: intermesh/groupoffice
+    image: intermesh/groupoffice:6.4
     restart: always
     ports:
       - "9000:80"
