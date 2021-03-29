@@ -1,5 +1,5 @@
 # Image intermesh/groupoffice
-# docker build -t intermesh/groupoffice
+# docker build -t intermesh/groupoffice .
 
 FROM php:7.4-apache
 #FROM php:8.0.0RC5-apache-buster
@@ -17,20 +17,26 @@ EXPOSE 443
 
 RUN apt-get update && \
     apt-get install -y libxml2-dev libpng-dev libfreetype6-dev libjpeg62-turbo-dev zip tnef ssl-cert libldap2-dev \
-		catdoc unzip tar imagemagick tesseract-ocr tesseract-ocr-eng poppler-utils exiv2 libzip-dev mariadb-client && \
-		docker-php-ext-configure gd --with-freetype --with-jpeg && \
-		docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ && \
-    docker-php-ext-install soap pdo pdo_mysql calendar gd sysvshm sysvsem sysvmsg ldap opcache intl pcntl zip bcmath
-
-#mem cached
-RUN apt-get install -y libmemcached-dev zlib1g-dev && \
-		yes "" | pecl install memcached && \
-		echo "extension=memcached.so" > /usr/local/etc/php/conf.d/docker-php-ext-memcached.ini
+	catdoc unzip tar imagemagick tesseract-ocr tesseract-ocr-eng poppler-utils exiv2 libzip-dev \
+	libmemcached-dev zlib1g-dev
 
 #sysvshm sysvsem sysvmsg pcntl are for z-push
+RUN	docker-php-ext-configure gd --with-freetype --with-jpeg && \
+	docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ && \
+    docker-php-ext-install soap pdo pdo_mysql calendar gd sysvshm sysvsem sysvmsg ldap opcache intl pcntl zip bcmath && \
+
+#mem cached
+RUN yes "" | pecl install memcached && \
+	echo "extension=memcached.so" > $PHP_INI_DIR/conf.d/docker-php-ext-memcached.ini
 
 RUN pecl install apcu
 RUN docker-php-ext-enable apcu
+
+RUN apt purge -y binutils binutils-common binutils-x86-64-linux-gnu cpp cpp-8 dpkg-dev g++ g++-8 gcc gcc-8 icu-devtools \
+                libasan5 libatomic1 libbinutils libcc1-0 libfreetype6-dev libgcc-8-dev libicu-dev \
+                libisl19 libitm1 libjpeg62-turbo-dev libldap2-dev liblsan0 libmpc3 libmpfr6 libmpx2 libpng-dev \
+                libpng-tools libquadmath0 libstdc++-8-dev libtsan0 libubsan1 libxml2-dev patch --autoremove && \
+                rm -rf /var/lib/apt/lists/*
 
 RUN a2enmod ssl
 
@@ -38,10 +44,10 @@ RUN a2enmod ssl
 COPY ./etc/ssl/groupoffice/apache.conf /etc/ssl/groupoffice/apache.conf
 VOLUME /etc/ssl/groupoffice
 
-COPY ./etc/php.ini /usr/local/etc/php/
+COPY ./etc/php.ini $PHP_INI_DIR
 
 #configure apache
-ADD ./etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf
+ADD ./etc/apache2/sites-available/000-default.conf $APACHE_CONFDIR/sites-available/000-default.conf
 #RUN sed -i 's/{serverName}/'$APACHE_SERVER_NAME'/' /etc/apache2/sites-available/000-default.conf
 #RUN sed -i 's/{serverAdmin}/'$APACHE_SERVER_ADMIN'/' /etc/apache2/sites-available/000-default.conf
 
@@ -58,10 +64,10 @@ ADD https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.ta
 RUN tar xvzfC /tmp/ioncube_loaders_lin_x86-64.tar.gz /tmp/ \
     && rm /tmp/ioncube_loaders_lin_x86-64.tar.gz \
     && mkdir -p /usr/local/ioncube \
-    && cp /tmp/ioncube/ioncube_loader_* /usr/local/ioncube \
+    && cp /tmp/ioncube/ioncube_loader_lin_${PHP_VERSION%.*}.so /usr/local/ioncube \
     && rm -rf /tmp/ioncube
 
-RUN echo "zend_extension = /usr/local/ioncube/ioncube_loader_lin_7.4.so" >> /usr/local/etc/php/conf.d/00_ioncube.ini
+RUN echo "zend_extension = /usr/local/ioncube/ioncube_loader_lin_${PHP_VERSION%.*}.so" >> $PHP_INI_DIR/conf.d/00_ioncube.ini
 
 RUN mkdir -p /var/lib/groupoffice/multi_instance && chown -R www-data:www-data /var/lib/groupoffice
 #Group-Office data:
@@ -69,7 +75,7 @@ VOLUME /var/lib/groupoffice
 
 COPY docker-go-entrypoint.sh /usr/local/bin/
 
-ARG VERSION=6.5.36
+ARG VERSION=6.5.37
 #ARG PACKAGE=groupoffice-$VERSION-php-71
 ARG PACKAGE=groupoffice-$VERSION
 
