@@ -15,10 +15,11 @@ ENV MYSQL_HOST db
 EXPOSE 80
 EXPOSE 443
 
+# Install PHP build deps, Filesearch utils and mariadb-client is needed for mysqldump in multi_instance module
 RUN apt-get update && \
     apt-get install -y libxml2-dev libpng-dev libfreetype6-dev libjpeg62-turbo-dev zip tnef ssl-cert libldap2-dev \
 	catdoc unzip tar imagemagick tesseract-ocr tesseract-ocr-eng poppler-utils exiv2 libzip-dev \
-	libmemcached-dev zlib1g-dev
+	libmemcached-dev zlib1g-dev mariadb-client
 
 #sysvshm sysvsem sysvmsg pcntl are for z-push
 RUN	docker-php-ext-configure gd --with-freetype --with-jpeg && \
