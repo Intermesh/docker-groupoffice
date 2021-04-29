@@ -76,7 +76,7 @@ VOLUME /var/lib/groupoffice
 
 COPY docker-go-entrypoint.sh /usr/local/bin/
 
-ARG VERSION=6.5.42
+ARG VERSION=6.5.45
 #ARG PACKAGE=groupoffice-$VERSION-php-71
 ARG PACKAGE=groupoffice-$VERSION
 
