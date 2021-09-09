@@ -33,10 +33,10 @@ RUN yes "" | pecl install memcached && \
 RUN pecl install apcu
 RUN docker-php-ext-enable apcu
 
-RUN apt purge -y binutils binutils-common binutils-x86-64-linux-gnu cpp cpp-8 dpkg-dev g++ g++-8 gcc gcc-8 icu-devtools \
-                libasan5 libatomic1 libbinutils libcc1-0 libfreetype6-dev libgcc-8-dev libicu-dev \
-                libisl19 libitm1 libjpeg62-turbo-dev libldap2-dev liblsan0 libmpc3 libmpfr6 libmpx2 libpng-dev \
-                libpng-tools libquadmath0 libstdc++-8-dev libtsan0 libubsan1 libxml2-dev patch --autoremove && \
+RUN apt purge -y binutils binutils-common binutils-x86-64-linux-gnu cpp dpkg-dev g++ gcc icu-devtools \
+                libasan5 libatomic1 libbinutils libcc1-0 libfreetype6-dev libicu-dev \
+                libitm1 libjpeg62-turbo-dev libldap2-dev liblsan0 libmpc3 libmpfr6 libpng-dev \
+                libpng-tools libquadmath0  libtsan0 libubsan1 libxml2-dev patch --autoremove && \
                 rm -rf /var/lib/apt/lists/*
 
 RUN a2enmod ssl
@@ -76,7 +76,7 @@ VOLUME /var/lib/groupoffice
 
 COPY docker-go-entrypoint.sh /usr/local/bin/
 
-ARG VERSION=6.5.72
+ARG VERSION=6.5.74
 #ARG PACKAGE=groupoffice-$VERSION-php-71
 ARG PACKAGE=groupoffice-$VERSION
 
