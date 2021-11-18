@@ -17,6 +17,28 @@ docker-compose up -d
 
 Then launch your browser to http://localhost:9000 and the Group-Office installer should appear.
 
+### Cron job
+
+You should also configure a cron job on the host machine so that Group Office can run scheduled tasks. 
+   
+On Linux create a file /etc/cron.d/groupoffice and add (replace /path/to/docker-groupoffice):
+
+```cron
+* * * * * root docker exec --user www-data cd /path/to/docker-groupoffice && docker-compose exec groupoffice php /usr/local/share/groupoffice/cron.php
+```
+
+> On MacOS I ran on the terminal:
+>
+> ```bash
+> crontab -e
+> ```
+>
+> And added:
+>
+> ```bash
+> * * * * * /usr/local/bin/docker exec --user www-data cd /path/to/docker-groupoffice && docker-compose exec groupoffice php /usr/local/share/groupoffice/cron.php
+> ```
+
 ### Upgrading
 
 Navigate in the folder with docker-compose.yml and pull the image:
