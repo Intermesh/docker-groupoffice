@@ -3,7 +3,7 @@ set -e
 
 chown -R www-data:www-data /var/lib/groupoffice
 
-cp /etc/groupoffice/config.php.tpl /etc/groupoffice/config.php
+cp /usr/local/share/groupoffice-config.php.tpl /etc/groupoffice/config.php
 
 sed -i 's/{dbHost}/'${MYSQL_HOST}'/' /etc/groupoffice/config.php
 sed -i 's/{dbName}/'${MYSQL_DATABASE}'/' /etc/groupoffice/config.php

@@ -54,10 +54,10 @@ ADD ./etc/apache2/sites-available/000-default.conf $APACHE_CONFDIR/sites-availab
 
 RUN mkdir -p /etc/groupoffice/multi_instance && chown -R www-data:www-data /etc/groupoffice
 #default group-office config
-ADD ./etc/groupoffice/config.php.tpl /etc/groupoffice/config.php.tpl
+ADD ./etc/groupoffice/config.php.tpl /usr/local/share/groupoffice-config.php.tpl
 
-#For persistant multi instances
-VOLUME /etc/groupoffice/multi_instance
+#For persistant configuration
+VOLUME /etc/groupoffice
 
 #Install ioncube
 ADD https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz /tmp/
@@ -76,7 +76,7 @@ VOLUME /var/lib/groupoffice
 
 COPY docker-go-entrypoint.sh /usr/local/bin/
 
-ARG VERSION=6.5.86
+ARG VERSION=6.5.88
 #ARG PACKAGE=groupoffice-$VERSION-php-71
 ARG PACKAGE=groupoffice-$VERSION
 
@@ -90,7 +90,7 @@ RUN tar zxvfC /tmp/$PACKAGE.tar.gz /tmp/ \
 
 #Create studio subdirectory, make writable
 RUN mkdir -p /usr/local/share/groupoffice/go/modules/studio \
-    && chown -R www-data:www-data /usr/local/share/groupoffice/go/modules/studio
+    && chown -R www-data:www-data /usr/local/share/groupoffice/go/modules
 
 CMD ["apache2-foreground"]
 ENTRYPOINT ["docker-go-entrypoint.sh"]
