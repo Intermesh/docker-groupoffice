@@ -73,6 +73,10 @@ SSLCertificateFile /etc/ssl/groupoffice/certificate.crt
 SSLCertificateChainFile /etc/ssl/groupoffice/cabundle.crt
 ```
 
+HTTP Proxy
+----------
+When using a HTTP proxy to forward requests to the Docker container you need to set some headers to tell Group-Office about the real hostname. Read more about this here: https://groupoffice.readthedocs.io/en/latest/install/extras/httpproxy.html
+
 Enable debug mode
 -----------------
 You can enable debug mode with this command on the host:
