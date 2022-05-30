@@ -3,6 +3,9 @@
 
 FROM debian:bullseye-slim
 
+# Avoid question in installer
+ENV DEBIAN_FRONTEND=noninteractive
+
 ENV MYSQL_USER groupoffice
 ENV MYSQL_PASSWORD groupoffice
 ENV MYSQL_DATABASE groupoffice

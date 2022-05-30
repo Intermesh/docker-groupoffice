@@ -20,7 +20,7 @@ services:
     env_file:
       - ./db.env     
   db:
-    image: mariadb
+    image: mysql/mysql-server
     restart: always    
     env_file:
       - ./db.env
