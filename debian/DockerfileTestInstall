@@ -7,12 +7,9 @@
 #FROM debian:bullseye-slim
 FROM ubuntu:20.04
 
+ENV RUNLEVEL=3
 # Avoid question in installer
 ENV DEBIAN_FRONTEND=noninteractive
-ENV RUNLEVEL=2
-
-#ENV APACHE_SERVER_NAME localhost
-#ENV APACHE_SERVER_ADMIN admin@localhost
 
 EXPOSE 80
 EXPOSE 443
