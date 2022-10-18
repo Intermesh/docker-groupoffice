@@ -39,6 +39,9 @@ On Linux create a file /etc/cron.d/groupoffice and add (replace /path/to/docker-
 > * * * * * cd /path/to/docker-groupoffice && docker-compose exec -T groupoffice php /usr/local/share/groupoffice/cron.php
 > ```
 
+And do not forget to reload/restart the cron daemon to run this.
+(i.e. ```service cron reload``` for Debian/Ubuntu and related distros)
+
 ### Upgrading
 
 Navigate in the folder with docker-compose.yml and pull the image:
