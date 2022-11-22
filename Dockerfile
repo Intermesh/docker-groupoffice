@@ -1,8 +1,8 @@
 # Image intermesh/groupoffice
 # docker build -t intermesh/groupoffice:debian .
 
-FROM debian:bookworm-slim
-#FROM php:8.0.0RC5-apache-buster
+#FROM debian:bookworm-slim
+FROM ubuntu:22.10
 
 ENV MYSQL_USER groupoffice
 ENV MYSQL_PASSWORD groupoffice
@@ -15,13 +15,14 @@ ENV MYSQL_HOST db
 EXPOSE 80
 EXPOSE 443
 
+ENV DEBIAN_FRONTEND=noninteractive
+
 RUN apt update
 RUN apt install -y catdoc unzip tar imagemagick tesseract-ocr tesseract-ocr-eng poppler-utils exiv2 \
-		debconf-utils dirmngr gnupg wget
+		debconf-utils gnupg wget
 
 # Install Group-Office repo and key
 RUN echo "deb http://repo.group-office.com/ unstable  main" > /etc/apt/sources.list.d/groupoffice.list
-#RUN apt-key adv --recv-keys --keyserver pool.sks-keyservers.net 758837B
 RUN wget -O- https://repo.group-office.com/downloads/groupoffice.gpg | gpg --dearmor | tee /etc/apt/trusted.gpg.d/groupoffice.gpg
 RUN apt update
 
