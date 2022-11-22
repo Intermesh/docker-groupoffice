@@ -1,5 +1,5 @@
 # Image intermesh/groupoffice
-# docker build . -t intermesh/groupoffice:8.1 -f Dockerfile8.1
+# docker build . -t intermesh/groupoffice:testing .
 
 #FROM php:7.4-apache
 FROM php:8.1-apache
@@ -76,7 +76,7 @@ VOLUME /var/lib/groupoffice
 
 COPY docker-go-entrypoint.sh /usr/local/bin/
 
-ARG VERSION=6.6.130
+ARG VERSION=6.7.2
 #ARG PACKAGE=groupoffice-$VERSION-php-71
 ARG PACKAGE=groupoffice-$VERSION
 
