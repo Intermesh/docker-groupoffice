@@ -1,7 +1,7 @@
 # Image intermesh/groupoffice
-# docker build -t intermesh/groupoffice
+# docker build -t intermesh/groupoffice:debian .
 
-FROM debian:buster-slim
+FROM debian:bookworm-slim
 #FROM php:8.0.0RC5-apache-buster
 
 ENV MYSQL_USER groupoffice
@@ -20,7 +20,7 @@ RUN apt install -y catdoc unzip tar imagemagick tesseract-ocr tesseract-ocr-eng 
 		debconf-utils dirmngr gnupg wget
 
 # Install Group-Office repo and key
-RUN echo "deb http://repo.group-office.com/ 64-php-71 main" > /etc/apt/sources.list.d/groupoffice.list
+RUN echo "deb http://repo.group-office.com/ unstable  main" > /etc/apt/sources.list.d/groupoffice.list
 RUN apt-key adv --recv-keys --keyserver pool.sks-keyservers.net 0758838B
 RUN apt update
 
