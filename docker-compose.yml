@@ -1,7 +1,7 @@
 version: "3.1"
 services:
   groupoffice:
-    image: intermesh/groupoffice:develop
+    image: intermesh/groupoffice:debian
     restart: always
     ports:
       - "9000:80"

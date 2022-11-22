@@ -21,7 +21,8 @@ RUN apt install -y catdoc unzip tar imagemagick tesseract-ocr tesseract-ocr-eng 
 
 # Install Group-Office repo and key
 RUN echo "deb http://repo.group-office.com/ unstable  main" > /etc/apt/sources.list.d/groupoffice.list
-RUN apt-key adv --recv-keys --keyserver pool.sks-keyservers.net 0758838B
+#RUN apt-key adv --recv-keys --keyserver pool.sks-keyservers.net 758837B
+RUN wget -O- https://repo.group-office.com/downloads/groupoffice.gpg | gpg --dearmor | tee /etc/apt/trusted.gpg.d/groupoffice.gpg
 RUN apt update
 
 # Don't install database
