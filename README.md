@@ -3,16 +3,16 @@ docker-groupoffice
 
 Group-Office is an open source groupware system. More information can be found at https://www.group-office.com.
 
-I recommend using this with docker-compose.
+I recommend using this with docker compose.
 
 
-Using docker-compose
+Using docker compose
 --------------------
 
 Clone this repository and run from inside the directory:
 
 ````````````````````
-docker-compose up -d
+docker compose up -d
 ````````````````````
 
 Then launch your browser to http://localhost:9000 and the Group-Office installer should appear.
@@ -24,7 +24,7 @@ You should also configure a cron job on the host machine so that Group Office ca
 On Linux create a file /etc/cron.d/groupoffice and add (replace /path/to/docker-groupoffice):
 
 ```cron
-* * * * * root cd /path/to/docker-groupoffice && docker-compose exec -T groupoffice php /usr/local/share/groupoffice/cron.php
+* * * * * root cd /path/to/docker-groupoffice && docker compose exec -T groupoffice php /usr/local/share/groupoffice/cron.php
 ```
 
 > On MacOS I ran on the terminal:
@@ -36,24 +36,24 @@ On Linux create a file /etc/cron.d/groupoffice and add (replace /path/to/docker-
 > And added:
 >
 > ```bash
-> * * * * * cd /path/to/docker-groupoffice && docker-compose exec -T groupoffice php /usr/local/share/groupoffice/cron.php
+> * * * * * cd /path/to/docker-groupoffice && docker compose exec -T groupoffice php /usr/local/share/groupoffice/cron.php
 > ```
 
 ### Upgrading
 
 Navigate in the folder with docker-compose.yml and pull the image:
 ```
-docker-compose pull
+docker compose pull
 ```
 
 Bring the containers down:
 ```
-docker-compose down
+docker compose down
 ```
 
 Then start them again:
 ```
-docker-compose up -d
+docker compose up -d
 ```
 Then run http://localhost:9000/install/upgrade.php
 
@@ -81,7 +81,7 @@ Enable debug mode
 -----------------
 You can enable debug mode with this command on the host:
 ```
-docker-compose exec groupoffice sed -i "s/config\['debug'\] = false;/config\['debug'\] = true;/" /etc/groupoffice/config.php
+docker compose exec groupoffice sed -i "s/config\['debug'\] = false;/config\['debug'\] = true;/" /etc/groupoffice/config.php
 ```
 
 Using docker cli
