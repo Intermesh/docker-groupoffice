@@ -1,5 +1,5 @@
-docker-groupoffice
-==================
+Group-Office Docker image
+=========================
 
 Group-Office is an open source groupware system. More information can be found at https://www.group-office.com.
 
