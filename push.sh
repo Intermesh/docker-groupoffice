@@ -1,5 +1,5 @@
 #!/bin/bash
 set -e
-docker build --no-cache . -t intermesh/groupoffice:testing
+docker build --no-cache . -t intermesh/groupoffice:latest
 docker login
-docker push intermesh/groupoffice:testing
+docker push intermesh/groupoffice:latest
