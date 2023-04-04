@@ -26,6 +26,7 @@ services:
       - ./db.env
     environment:
       MYSQL_ROOT_PASSWORD: groupoffice
+      MARIADB_AUTO_UPGRADE: true
     volumes:
       - "dbdata:/var/lib/mysql:cached"
 volumes:
