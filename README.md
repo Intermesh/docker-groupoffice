@@ -92,5 +92,5 @@ Using docker cli
 3. Run this command:
 
 ````
-docker run --name groupoffice -d -p 6380:80 -v ~/Projects/docker-groupoffice-6.3/data:/var/lib/groupoffice --link go_db:db intermesh/groupoffice
+docker run --name groupoffice -d -p 6380:80 -v ~/Projects/docker-groupoffice/data:/var/lib/groupoffice --link go_db:db intermesh/groupoffice
 ````
