@@ -22,7 +22,7 @@ RUN apt install -y catdoc unzip tar imagemagick tesseract-ocr tesseract-ocr-eng 
 		debconf-utils gnupg wget
 
 # Install Group-Office repo and key
-RUN echo "deb http://repo.group-office.com/ testing  main" > /etc/apt/sources.list.d/groupoffice.list
+RUN echo "deb http://repo.group-office.com/ sixseven  main" > /etc/apt/sources.list.d/groupoffice.list
 RUN wget -O- https://repo.group-office.com/downloads/groupoffice.gpg | gpg --dearmor | tee /etc/apt/trusted.gpg.d/groupoffice.gpg
 RUN apt update
 
