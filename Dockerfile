@@ -23,8 +23,8 @@ RUN apt-get update --allow-releaseinfo-change && apt-get dist-upgrade -y && \
 
 #sysvshm sysvsem sysvmsg pcntl are for z-push
 RUN	docker-php-ext-configure gd --with-freetype --with-jpeg && \
-	docker-php-ext-configure ldap --with-libdir=lib/x86_64-linux-gnu/ && \
-    docker-php-ext-install soap pdo pdo_mysql calendar gd sysvshm sysvsem sysvmsg ldap opcache intl pcntl zip bcmath && \
+	docker-php-ext-configure ldap && \
+    docker-php-ext-install soap pdo pdo_mysql calendar gd sysvshm sysvsem sysvmsg ldap opcache intl pcntl zip bcmath
 
 #mem cached
 RUN yes "" | pecl install memcached && \
@@ -36,7 +36,7 @@ RUN docker-php-ext-enable apcu
 RUN apt purge -y binutils binutils-common binutils-x86-64-linux-gnu cpp dpkg-dev g++ gcc icu-devtools \
                 libasan5 libatomic1 libbinutils libcc1-0 libfreetype6-dev libicu-dev \
                 libitm1 libjpeg62-turbo-dev libldap2-dev liblsan0 libmpc3 libmpfr6 libpng-dev \
-                libpng-tools libquadmath0  libtsan0 libubsan1 libxml2-dev patch --autoremove && \
+                libpng-tools libtsan0 libubsan1 libxml2-dev patch --autoremove && \
                 rm -rf /var/lib/apt/lists/*
 
 RUN a2enmod ssl
@@ -60,15 +60,11 @@ ADD ./etc/groupoffice/config.php.tpl /usr/local/share/groupoffice-config.php.tpl
 VOLUME /etc/groupoffice
 
 #Install ioncube
-ADD https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz /tmp/
 
-RUN tar xvzfC /tmp/ioncube_loaders_lin_x86-64.tar.gz /tmp/ \
-    && rm /tmp/ioncube_loaders_lin_x86-64.tar.gz \
-    && mkdir -p /usr/local/ioncube \
-    && cp /tmp/ioncube/ioncube_loader_lin_${PHP_VERSION%.*}.so /usr/local/ioncube \
-    && rm -rf /tmp/ioncube
+ADD ./install-ioncube.sh /usr/local/bin/install-ioncube.sh
+ARG TARGETPLATFORM
+RUN /usr/local/bin/install-ioncube.sh $TARGETPLATFORM ${PHP_VERSION%.*} $PHP_INI_DIR
 
-RUN echo "zend_extension = /usr/local/ioncube/ioncube_loader_lin_${PHP_VERSION%.*}.so" >> $PHP_INI_DIR/conf.d/00_ioncube.ini
 
 RUN mkdir -p /var/lib/groupoffice/multi_instance && chown -R www-data:www-data /var/lib/groupoffice
 #Group-Office data:
@@ -76,7 +72,7 @@ VOLUME /var/lib/groupoffice
 
 COPY docker-go-entrypoint.sh /usr/local/bin/
 
-ARG VERSION=6.6.158
+ARG VERSION=6.6.159
 ARG PACKAGE=groupoffice-$VERSION
 
 #https://github.com/Intermesh/groupoffice/releases/download/v6.5.35/groupoffice-6.5.35.tar.gz
