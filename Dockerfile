@@ -60,15 +60,11 @@ ADD ./etc/groupoffice/config.php.tpl /usr/local/share/groupoffice-config.php.tpl
 VOLUME /etc/groupoffice
 
 #Install ioncube
-ADD https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz /tmp/
 
-RUN tar xvzfC /tmp/ioncube_loaders_lin_x86-64.tar.gz /tmp/ \
-    && rm /tmp/ioncube_loaders_lin_x86-64.tar.gz \
-    && mkdir -p /usr/local/ioncube \
-    && cp /tmp/ioncube/ioncube_loader_lin_${PHP_VERSION%.*}.so /usr/local/ioncube \
-    && rm -rf /tmp/ioncube
+ADD ./install-ioncube.sh /usr/local/bin/install-ioncube.sh
+ARG TARGETPLATFORM
+RUN /usr/local/bin/install-ioncube.sh $TARGETPLATFORM ${PHP_VERSION%.*} $PHP_INI_DIR
 
-RUN echo "zend_extension = /usr/local/ioncube/ioncube_loader_lin_${PHP_VERSION%.*}.so" >> $PHP_INI_DIR/conf.d/00_ioncube.ini
 
 RUN mkdir -p /var/lib/groupoffice/multi_instance && chown -R www-data:www-data /var/lib/groupoffice
 #Group-Office data:
@@ -77,7 +73,6 @@ VOLUME /var/lib/groupoffice
 COPY docker-go-entrypoint.sh /usr/local/bin/
 
 ARG VERSION=6.7.25
-#ARG PACKAGE=groupoffice-$VERSION-php-71
 ARG PACKAGE=groupoffice-$VERSION
 
 #https://github.com/Intermesh/groupoffice/releases/download/v6.5.35/groupoffice-6.5.35.tar.gz
