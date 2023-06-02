@@ -1,7 +1,7 @@
 # Image intermesh/groupoffice
-# docker build -t intermesh/groupoffice:debian .
+# docker build --no-cache -t intermesh/groupoffice:debian .
 
-FROM debian:bookworm-slim
+FROM debian:bullseye-slim
 #FROM ubuntu:22.10
 
 ENV MYSQL_USER groupoffice
@@ -17,19 +17,20 @@ EXPOSE 443
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt update
-RUN apt install -y catdoc unzip tar imagemagick tesseract-ocr tesseract-ocr-eng poppler-utils exiv2 \
+RUN apt-get update
+RUN apt-get install -y catdoc unzip tar imagemagick tesseract-ocr tesseract-ocr-eng poppler-utils exiv2 \
 		debconf-utils gnupg wget
 
 # Install Group-Office repo and key
 RUN echo "deb http://repo.group-office.com/ sixseven  main" > /etc/apt/sources.list.d/groupoffice.list
-RUN wget -O- https://repo.group-office.com/downloads/groupoffice.gpg | gpg --dearmor | tee /etc/apt/trusted.gpg.d/groupoffice.gpg
-RUN apt update
+RUN wget -O- https://repo.group-office.com/downloads/groupoffice.gpg | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/groupoffice.gpg
+RUN apt-get update
 
 # Don't install database
 RUN echo "groupoffice	groupoffice/dbconfig-install	boolean	false" | debconf-set-selections
-
-RUN apt -y install groupoffice php-apcu
+RUN cat /etc/apt/sources.list.d/groupoffice.list
+RUN cat /etc/apt/sources.list
+RUN apt-get -y install groupoffice php-apcu
 
 RUN a2enmod ssl
 
@@ -52,7 +53,7 @@ VOLUME /etc/groupoffice/multi_instance
 
 #Install ioncube
 ADD ./ioncube_installer.sh /usr/local/bin
-RUN /usr/local/bin/ioncube_installer.sh
+#RUN /usr/local/bin/ioncube_installer.sh
 
 RUN mkdir -p /var/lib/groupoffice/multi_instance && chown -R www-data:www-data /var/lib/groupoffice
 #Group-Office data:
@@ -70,4 +71,4 @@ COPY docker-go-entrypoint.sh /usr/local/bin/
 ENTRYPOINT ["docker-go-entrypoint.sh"]
 
 # clean up
-RUN apt purge -y --auto-remove debconf-utils dirmngr gnupg wget
+RUN apt-get purge -y --auto-remove debconf-utils dirmngr gnupg wget
