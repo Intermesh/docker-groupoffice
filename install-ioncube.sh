@@ -4,10 +4,6 @@ PLATFORM=$1
 PHP=$2
 INI_DIR=$3
 
-echo $PLATFORM;
-echo $PHP
-echo $INI_DIR;
-
 if [ "$PLATFORM" = "linux/arm64" ]; then
     ARCH="aarch64";
 else
