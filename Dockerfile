@@ -24,7 +24,7 @@ RUN apt-get update --allow-releaseinfo-change && apt-get dist-upgrade -y && \
 #sysvshm sysvsem sysvmsg pcntl are for z-push
 RUN	docker-php-ext-configure gd --with-freetype --with-jpeg && \
 	docker-php-ext-configure ldap && \
-    docker-php-ext-install soap pdo pdo_mysql calendar gd sysvshm sysvsem sysvmsg ldap opcache intl pcntl zip bcmath
+    docker-php-ext-install soap pdo pdo_mysql calendar gd sysvshm sysvsem sysvmsg ldap opcache intl pcntl zip bcmath exif
 
 #mem cached
 RUN yes "" | pecl install memcached && \
