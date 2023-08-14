@@ -1,8 +1,6 @@
 #!/bin/bash
 set -e
 PLATFORM=$1
-PHP=$2
-INI_DIR=$3
 
 if [ "$PLATFORM" = "linux/arm64" ]; then
     ARCH="aarch64";

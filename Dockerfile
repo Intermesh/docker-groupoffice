@@ -1,8 +1,8 @@
 # Image intermesh/groupoffice
-# docker build . -t intermesh/groupoffice:testing .
+# docker buildx build -t intermesh/groupoffice:testing . --load
 
 #FROM php:7.4-apache
-FROM php:8.1-apache-bullseye
+FROM php:8.2-apache
 
 ENV MYSQL_USER groupoffice
 ENV MYSQL_PASSWORD groupoffice
@@ -19,24 +19,30 @@ EXPOSE 443
 RUN apt-get update --allow-releaseinfo-change && apt-get dist-upgrade -y && \
     apt-get install -y libxml2-dev libpng-dev libfreetype6-dev libjpeg62-turbo-dev zip tnef ssl-cert libldap2-dev \
 	catdoc unzip tar imagemagick tesseract-ocr tesseract-ocr-eng poppler-utils exiv2 libzip-dev \
-	libmemcached-dev zlib1g-dev mariadb-client
+	zlib1g-dev mariadb-client
 
 #sysvshm sysvsem sysvmsg pcntl are for z-push
 RUN	docker-php-ext-configure gd --with-freetype --with-jpeg && \
 	docker-php-ext-configure ldap && \
     docker-php-ext-install soap pdo pdo_mysql calendar gd sysvshm sysvsem sysvmsg ldap opcache intl pcntl zip bcmath exif
 
+RUN curl -sSLf \
+        -o /usr/local/bin/install-php-extensions \
+        https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions && \
+    chmod +x /usr/local/bin/install-php-extensions && \
+    install-php-extensions sourceguardian
+
 #mem cached
-RUN yes "" | pecl install memcached && \
-	echo "extension=memcached.so" > $PHP_INI_DIR/conf.d/docker-php-ext-memcached.ini
+#RUN yes "" | pecl install memcached && \
+#	echo "extension=memcached.so" > $PHP_INI_DIR/conf.d/docker-php-ext-memcached.ini
 
 RUN pecl install apcu
 RUN docker-php-ext-enable apcu
 
-RUN apt purge -y binutils binutils-common binutils-x86-64-linux-gnu cpp dpkg-dev g++ gcc icu-devtools \
-                libasan5 libatomic1 libbinutils libcc1-0 libfreetype6-dev libicu-dev \
+RUN apt purge -y binutils binutils-common cpp dpkg-dev g++ gcc icu-devtools \
+                libatomic1 libbinutils libcc1-0 libfreetype6-dev libicu-dev \
                 libitm1 libjpeg62-turbo-dev libldap2-dev liblsan0 libmpc3 libmpfr6 libpng-dev \
-                libpng-tools libtsan0 libubsan1 libxml2-dev patch --autoremove && \
+                libpng-tools libubsan1 libxml2-dev patch --autoremove && \
                 rm -rf /var/lib/apt/lists/*
 
 RUN a2enmod ssl
@@ -61,9 +67,9 @@ VOLUME /etc/groupoffice
 
 #Install ioncube
 
-ADD ./install-ioncube.sh /usr/local/bin/install-ioncube.sh
-ARG TARGETPLATFORM
-RUN /usr/local/bin/install-ioncube.sh $TARGETPLATFORM ${PHP_VERSION%.*} $PHP_INI_DIR
+#ADD ./install-ioncube.sh /usr/local/bin/install-ioncube.sh
+#ARG TARGETPLATFORM
+#RUN /usr/local/bin/install-ioncube.sh $TARGETPLATFORM ${PHP_VERSION%.*} $PHP_INI_DIR
 
 
 RUN mkdir -p /var/lib/groupoffice/multi_instance && chown -R www-data:www-data /var/lib/groupoffice
