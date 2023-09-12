@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 # group-office.com
 
 # Check if PHP CLI is installed
@@ -12,6 +13,8 @@ elif [[ "$DPKG_ARCH" = "arm64" ]]; then
   ARCH="aarch64"
 fi
 
+echo Detected architecture $ARCH;
+
 URL=https://www.sourceguardian.com/loaders/download/loaders.linux-${ARCH}.tar.gz
 
 echo "Downloading ${URL}"
@@ -22,14 +25,14 @@ curl "${URL}" | tar -xzf - -C /usr/local/sourceguardian
 PHP_V=$(php -v)
 PHP_VERSION=${PHP_V:4:3}
 
+echo Detected PHP version $PHP_VERSION;
+
 # Add the IonCube loader to the PHP configuration
 echo "zend_extension=/usr/local/sourceguardian/ixed.${PHP_VERSION}.lin" \
     > "/etc/php/${PHP_VERSION}/mods-available/sourceguardian.ini"
 
+echo "Enabling sourceguardian module"
 phpenmod sourceguardian
-
-#mv "/etc/php/${PHP_VERSION}/apache2/conf.d/20-sourceguardian.ini" "/etc/php/${PHP_VERSION}/apache2/conf.d/00-sourceguardian.ini"
-#mv "/etc/php/${PHP_VERSION}/cli/conf.d/20-sourceguardian.ini" "/etc/php/${PHP_VERSION}/cli/conf.d/00-sourceguardian.ini"
 
 echo "Reloading apache"
 
