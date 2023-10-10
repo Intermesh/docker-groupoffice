@@ -12,4 +12,9 @@ minor=${BASH_REMATCH[2]};
 patch=${BASH_REMATCH[3]};
 
 docker login
-docker buildx build --push --platform linux/amd64,linux/arm64 -t intermesh/groupoffice:latest -t intermesh/groupoffice:$major.$minor -t intermesh/groupoffice $major.$minor.$patch .
+docker buildx build \
+    --push --platform linux/amd64,linux/arm64 \
+    -t intermesh/groupoffice:latest \
+    -t intermesh/groupoffice:$major.$minor \
+    -t intermesh/groupoffice:$major.$minor.$patch \
+    .
