@@ -1,7 +1,6 @@
 # Image intermesh/groupoffice
 # docker buildx build -t intermesh/groupoffice:testing . --load
 
-#FROM php:7.4-apache
 FROM php:8.2-apache
 
 ENV MYSQL_USER groupoffice
@@ -78,7 +77,7 @@ VOLUME /var/lib/groupoffice
 
 COPY docker-go-entrypoint.sh /usr/local/bin/
 
-ARG VERSION=6.8.30
+ARG VERSION=6.8.31
 ARG PACKAGE=groupoffice-$VERSION
 
 #https://github.com/Intermesh/groupoffice/releases/download/v6.5.35/groupoffice-6.5.35.tar.gz
