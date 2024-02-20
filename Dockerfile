@@ -15,8 +15,9 @@ EXPOSE 80
 EXPOSE 443
 
 # Install PHP build deps, Filesearch utils and mariadb-client is needed for mysqldump in multi_instance module
-RUN apt-get update --allow-releaseinfo-change && apt-get dist-upgrade -y && \
-    apt-get install -y libxml2-dev libpng-dev libfreetype6-dev libjpeg62-turbo-dev zip tnef ssl-cert libldap2-dev \
+RUN apt-get update --allow-releaseinfo-change
+RUN apt-get dist-upgrade -y 
+RUN apt-get install -y libxml2-dev libpng-dev libfreetype6-dev libjpeg62-turbo-dev zip tnef ssl-cert libldap2-dev \
 	catdoc unzip tar imagemagick tesseract-ocr tesseract-ocr-eng poppler-utils exiv2 libzip-dev \
 	zlib1g-dev mariadb-client
 
