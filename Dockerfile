@@ -75,6 +75,9 @@ RUN mkdir -p /var/lib/groupoffice/multi_instance && chown -R www-data:www-data /
 #Group-Office data:
 VOLUME /var/lib/groupoffice
 
+
+ADD ./usr/lib/ssl/openssl.cnf /usr/lib/ssl/openssl.cnf
+
 COPY docker-go-entrypoint.sh /usr/local/bin/
 
 ARG VERSION=6.8.35
