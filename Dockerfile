@@ -49,6 +49,7 @@ RUN a2enmod ssl
 
 # SSL volume can be used to replace SSL config and certificates
 COPY ./etc/ssl/groupoffice/apache.conf /etc/ssl/groupoffice/apache.conf
+COPY ./etc/ssl/openssl.cnf /etc/ssl/openssl.cnf
 VOLUME /etc/ssl/groupoffice
 
 COPY ./etc/php.ini $PHP_INI_DIR
@@ -77,7 +78,7 @@ RUN mkdir -p /var/lib/groupoffice/multi_instance && chown -R www-data:www-data /
 VOLUME /var/lib/groupoffice
 
 
-ADD ./usr/lib/ssl/openssl.cnf /usr/lib/ssl/openssl.cnf
+
 
 COPY docker-go-entrypoint.sh /usr/local/bin/
 
