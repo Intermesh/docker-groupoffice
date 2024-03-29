@@ -1,13 +1,7 @@
 # Image intermesh/groupoffice
-
-#
 # docker buildx build -t intermesh/groupoffice:testing . --load
-#
-# to use a local image in docker compose disable buildkit:
-# export DOCKER_BUILDKIT=0
-# docker compose build groupoffice
 
-FROM php:8.3-apache
+FROM php:8.2-apache
 
 ENV MYSQL_USER groupoffice
 ENV MYSQL_PASSWORD groupoffice
@@ -32,12 +26,11 @@ RUN	docker-php-ext-configure gd --with-freetype --with-jpeg && \
 	docker-php-ext-configure ldap && \
     docker-php-ext-install soap pdo pdo_mysql calendar gd sysvshm sysvsem sysvmsg ldap opcache intl pcntl zip bcmath exif
 
-# arm64 not yet released for SG
-#RUN curl -sSLf \
-#        -o /usr/local/bin/install-php-extensions \
-#        https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions && \
-#    chmod +x /usr/local/bin/install-php-extensions && \
-#    install-php-extensions sourceguardian
+RUN curl -sSLf \
+        -o /usr/local/bin/install-php-extensions \
+        https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions && \
+    chmod +x /usr/local/bin/install-php-extensions && \
+    install-php-extensions sourceguardian
 
 #mem cached
 #RUN yes "" | pecl install memcached && \
