@@ -56,8 +56,6 @@ COPY ./etc/php.ini $PHP_INI_DIR
 
 #configure apache
 ADD ./etc/apache2/sites-available/000-default.conf $APACHE_CONFDIR/sites-available/000-default.conf
-#RUN sed -i 's/{serverName}/'$APACHE_SERVER_NAME'/' /etc/apache2/sites-available/000-default.conf
-#RUN sed -i 's/{serverAdmin}/'$APACHE_SERVER_ADMIN'/' /etc/apache2/sites-available/000-default.conf
 
 RUN mkdir -p /etc/groupoffice/multi_instance && chown -R www-data:www-data /etc/groupoffice
 #default group-office config
@@ -66,26 +64,14 @@ ADD ./etc/groupoffice/config.php.tpl /usr/local/share/groupoffice-config.php.tpl
 #For persistant configuration
 VOLUME /etc/groupoffice
 
-#Install ioncube
-
-#ADD ./install-ioncube.sh /usr/local/bin/install-ioncube.sh
-#ARG TARGETPLATFORM
-#RUN /usr/local/bin/install-ioncube.sh $TARGETPLATFORM ${PHP_VERSION%.*} $PHP_INI_DIR
-
-
 RUN mkdir -p /var/lib/groupoffice/multi_instance && chown -R www-data:www-data /var/lib/groupoffice
 #Group-Office data:
 VOLUME /var/lib/groupoffice
-
-
-
 
 COPY docker-go-entrypoint.sh /usr/local/bin/
 
 ARG VERSION=6.8.42
 ARG PACKAGE=groupoffice-$VERSION
-
-#https://github.com/Intermesh/groupoffice/releases/download/v6.5.35/groupoffice-6.5.35.tar.gz
 
 #Download package from GitHub
 ADD https://github.com/Intermesh/groupoffice/releases/download/v$VERSION/$PACKAGE.tar.gz /tmp/
