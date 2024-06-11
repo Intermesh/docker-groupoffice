@@ -3,11 +3,10 @@
 # To build test image:
 
 # Disable build kit to make docker compose use the local image
-# DOCKER_BUILDKIT=0
-# docker buildx build --load . -t intermesh/groupoffice:testing
-# docker compose build serviceusingtesting
+# DOCKER_BUILDKIT=0 docker buildx build --load . -t intermesh/groupoffice:testing
+# DOCKER_BUILDKIT=0 docker compose build serviceusingtesting
 
-FROM php:8.2-apache
+FROM php:8.3-apache
 
 ENV MYSQL_USER groupoffice
 ENV MYSQL_PASSWORD groupoffice
