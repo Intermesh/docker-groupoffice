@@ -1,0 +1,87 @@
+# Image intermesh/groupoffice
+# docker build . -t intermesh/groupoffice:bullseye -f DockerfileDebian
+
+FROM debian:bullseye-slim
+
+# Avoid question in installer
+ENV DEBIAN_FRONTEND=noninteractive
+
+ENV MYSQL_USER groupoffice
+ENV MYSQL_PASSWORD groupoffice
+ENV MYSQL_DATABASE groupoffice
+ENV MYSQL_HOST db
+
+#ENV APACHE_SERVER_NAME localhost
+#ENV APACHE_SERVER_ADMIN admin@localhost
+
+EXPOSE 80
+EXPOSE 443
+
+
+
+# Install PHP build deps, Filesearch utils and mariadb-client is needed for mysqldump in multi_instance module
+RUN apt-get update --allow-releaseinfo-change && apt-get dist-upgrade -y && \
+    apt-get install -y libxml2-dev libpng-dev libfreetype6-dev libjpeg62-turbo-dev zip tnef ssl-cert libldap2-dev \
+	catdoc unzip tar imagemagick tesseract-ocr tesseract-ocr-eng poppler-utils exiv2 libzip-dev \
+	libmemcached-dev zlib1g-dev mariadb-client apache2 libapache2-mod-php php-apcu \
+    debconf-utils gnupg wget dirmngr
+
+RUN echo "deb http://repo.group-office.com/ sixsix main" > /etc/apt/sources.list.d/groupoffice.list
+RUN apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0758838B
+RUN apt-get update  --allow-releaseinfo-change
+
+# Don't install database
+RUN echo "groupoffice	groupoffice/dbconfig-install	boolean	false" | debconf-set-selections
+RUN apt install groupoffice -y --no-install-recommends
+
+RUN apt purge -y binutils binutils-common binutils-x86-64-linux-gnu cpp dpkg-dev g++ gcc icu-devtools \
+                libasan5 libatomic1 libbinutils libcc1-0 libfreetype6-dev libicu-dev \
+                libitm1 libjpeg62-turbo-dev libldap2-dev liblsan0 libmpc3 libmpfr6 libpng-dev \
+                libpng-tools libquadmath0  libtsan0 libubsan1 libxml2-dev patch --autoremove && \
+                rm -rf /var/lib/apt/lists/*
+
+RUN a2enmod ssl
+
+# SSL volume can be used to replace SSL config and certificates
+COPY ./etc/ssl/groupoffice/apache.conf /etc/ssl/groupoffice/apache.conf
+VOLUME /etc/ssl/groupoffice
+
+COPY ../etc/php.ini $PHP_INI_DIR
+
+#configure apache
+ADD ../etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf
+#RUN sed -i 's/{serverName}/'$APACHE_SERVER_NAME'/' /etc/apache2/sites-available/000-default.conf
+#RUN sed -i 's/{serverAdmin}/'$APACHE_SERVER_ADMIN'/' /etc/apache2/sites-available/000-default.conf
+
+RUN mkdir -p /etc/groupoffice/multi_ins tance && chown -R www-data:www-data /etc/groupoffice
+#default group-office config
+ADD ../etc/groupoffice/config.php.tpl /usr/local/share/groupoffice-config.php.tpl
+
+#For persistant configuration
+VOLUME /etc/groupoffice
+
+#Install ioncube
+ADD ./ioncube_installer.sh /usr/local/bin
+RUN /usr/local/bin/ioncube_installer.sh
+
+RUN mkdir -p /var/lib/groupoffice/multi_instance && chown -R www-data:www-data /var/lib/groupoffice
+#Group-Office data:
+VOLUME /var/lib/groupoffice
+
+COPY docker-go-entrypoint.sh /usr/local/bin/
+
+ARG VERSION=6.6.42
+#ARG PACKAGE=groupoffice-$VERSION-php-71
+ARG PACKAGE=groupoffice-$VERSION
+
+#Download package from GitHub
+ADD https://github.com/Intermesh/groupoffice/releases/download/v$VERSION/$PACKAGE.tar.gz /tmp/
+RUN tar zxvfC /tmp/$PACKAGE.tar.gz /tmp/ \
+    && rm /tmp/$PACKAGE.tar.gz \
+    && mv /tmp/$PACKAGE /usr/local/share/groupoffice
+
+#Create studio subdirectory, make writable
+RUN mkdir -p /usr/share/groupoffice/go/modules/studio \
+    && chown -R www-data:www-data /usr/share/groupoffice/go/modules
+
+ENTRYPOINT ["docker-go-entrypoint.sh"]

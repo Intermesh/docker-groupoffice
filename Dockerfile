@@ -1,8 +1,14 @@
 # Image intermesh/groupoffice
 # docker build --no-cache -t intermesh/groupoffice:debian .
 
+# To build test image:
+
+# Disable build kit to make docker compose use the local image
+# DOCKER_BUILDKIT=0
+# docker buildx build --load . -t intermesh/groupoffice:testing
+# docker compose build serviceusingtesting
+
 FROM debian:bookworm-slim
-#FROM ubuntu:22.10
 
 ENV MYSQL_USER groupoffice
 ENV MYSQL_PASSWORD groupoffice
@@ -19,11 +25,11 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update
 RUN apt-get install -y catdoc unzip tar imagemagick tesseract-ocr tesseract-ocr-eng poppler-utils exiv2 \
-		debconf-utils gnupg wget
+		debconf-utils gnupg curl
 
 # Install Group-Office repo and key
 RUN echo "deb http://repo.group-office.com/ sixeight  main" > /etc/apt/sources.list.d/groupoffice.list
-RUN wget -O- https://repo.group-office.com/downloads/groupoffice.gpg | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/groupoffice.gpg
+RUN curl -s https://repo.group-office.com/downloads/groupoffice.gpg | gpg --dearmor --yes -o /etc/apt/trusted.gpg.d/groupoffice.gpg
 RUN apt-get update
 
 # Don't install database
@@ -76,13 +82,20 @@ RUN echo "groupoffice	groupoffice/upgrade-error	select	abort" | debconf-set-sele
 # RUN cat /etc/apt/sources.list
 RUN apt-get -y install groupoffice php-apcu
 
+RUN apt purge -y binutils binutils-common cpp dpkg-dev g++ gcc icu-devtools \
+                libatomic1 libbinutils libcc1-0 libfreetype6-dev libicu-dev \
+                libitm1 libjpeg62-turbo-dev libldap2-dev liblsan0 libmpc3 libmpfr6 libpng-dev \
+                libpng-tools libubsan1 libxml2-dev patch --autoremove && \
+                rm -rf /var/lib/apt/lists/*
+
 RUN a2enmod ssl
 
 # SSL volume can be used to replace SSL config and certificates
 COPY ./etc/ssl/groupoffice/apache.conf /etc/ssl/groupoffice/apache.conf
+COPY ./etc/ssl/openssl.cnf /etc/ssl/openssl.cnf
 VOLUME /etc/ssl/groupoffice
 
-COPY ./etc/php.ini /usr/local/etc/php/
+COPY ./etc/php.ini $PHP_INI_DIR
 
 #configure apache
 ADD ./etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf
@@ -94,10 +107,6 @@ run touch /etc/groupoffice/config.php
 run chown www-data:www-data /etc/groupoffice/config.php
 #For persistant multi instances
 VOLUME /etc/groupoffice
-
-#Install ioncube
-# ADD ./ioncube_installer.sh /usr/local/bin
-#RUN /usr/local/bin/ioncube_installer.sh
 
 RUN mkdir -p /var/lib/groupoffice/multi_instance && chown -R www-data:www-data /var/lib/groupoffice
 #Group-Office data:
@@ -112,7 +121,11 @@ RUN ln -sfT /dev/stderr /var/log/apache2/error.log; \
 
 COPY docker-go-entrypoint.sh /usr/local/bin/
 
+run apt-get install
+run curl -s https://raw.githubusercontent.com/Intermesh/groupoffice/master/scripts/sg_install.sh | bash
+
+
 ENTRYPOINT ["docker-go-entrypoint.sh"]
 
 # clean up
-RUN apt-get purge -y --auto-remove debconf-utils dirmngr gnupg wget
+RUN apt-get purge -y --auto-remove debconf-utils dirmngr gnupg curl

@@ -1,0 +1,28 @@
+# Image intermesh/groupoffice
+
+# docker build . -t intermesh/groupoffice:test -f DockerfileTestInstall
+# docker run --privileged -p 9080:80 -ti --rm intermesh/groupoffice:test /bin/bash
+# apt install groupoffice
+
+#FROM debian:bullseye-slim
+FROM ubuntu:20.04
+
+ENV RUNLEVEL=3
+# Avoid question in installer
+ENV DEBIAN_FRONTEND=noninteractive
+
+EXPOSE 80
+EXPOSE 443
+
+# Update and install tools. systemd-sysv is needed for allowing services to start when installed
+RUN apt-get update --allow-releaseinfo-change && apt-get dist-upgrade -y && \
+    apt-get install -y debconf-utils gnupg wget dirmngr systemd-sysv dialog
+
+RUN echo "deb http://repo.group-office.com/ sixsix main" > /etc/apt/sources.list.d/groupoffice.list
+RUN apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 0758838B
+RUN apt-get update  --allow-releaseinfo-change
+
+# otherwise invoice-rc.d won't start mysql or apache
+RUN printf '#!/bin/sh\nexit 0' > /usr/sbin/policy-rc.d
+
+ENV DEBIAN_FRONTEND=dialog
