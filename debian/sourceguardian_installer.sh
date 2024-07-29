@@ -19,6 +19,7 @@ URL=https://www.sourceguardian.com/loaders/download/loaders.linux-${ARCH}.tar.gz
 
 echo "Downloading ${URL}"
 # Download and extract
+rm -rf /usr/local/sourceguardian
 mkdir /usr/local/sourceguardian
 curl "${URL}" | tar -xzf - -C /usr/local/sourceguardian
 # Find PHP version

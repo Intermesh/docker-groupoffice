@@ -80,13 +80,7 @@ RUN echo "groupoffice	groupoffice/upgrade-error	select	abort" | debconf-set-sele
 
 # RUN cat /etc/apt/sources.list.d/groupoffice.list
 # RUN cat /etc/apt/sources.list
-RUN apt-get -y install groupoffice php-apcu
-
-RUN apt purge -y binutils binutils-common cpp dpkg-dev g++ gcc icu-devtools \
-                libatomic1 libbinutils libcc1-0 libfreetype6-dev libicu-dev \
-                libitm1 libjpeg62-turbo-dev libldap2-dev liblsan0 libmpc3 libmpfr6 libpng-dev \
-                libpng-tools libubsan1 libxml2-dev patch --autoremove && \
-                rm -rf /var/lib/apt/lists/*
+RUN apt-get -y install groupoffice groupoffice-mailserver groupoffice-mailserver-antispam php-apcu mariadb-server supervisor bash rsyslog
 
 RUN a2enmod ssl
 
@@ -108,24 +102,19 @@ run chown www-data:www-data /etc/groupoffice/config.php
 #For persistant multi instances
 VOLUME /etc/groupoffice
 
+ADD ./debian/sourceguardian_installer.sh /usr/local/bin
+RUN /usr/local/bin/sourceguardian_installer.sh
+
 RUN mkdir -p /var/lib/groupoffice/multi_instance && chown -R www-data:www-data /var/lib/groupoffice
 #Group-Office data:
 VOLUME /var/lib/groupoffice
 
 
-# output apache log to stderr and stdout
-RUN ln -sfT /dev/stderr /var/log/apache2/error.log; \
-	ln -sfT /dev/stdout /var/log/apache2/access.log; \
-	ln -sfT /dev/stdout /var/log/apache2/other_vhosts_access.log; \
-	chown -R --no-dereference www-data:www-data /var/log/apache2
-
 COPY docker-go-entrypoint.sh /usr/local/bin/
 
-run apt-get install
-run curl -s https://raw.githubusercontent.com/Intermesh/groupoffice/master/scripts/sg_install.sh | bash
+# run apt-get install
+# run curl -s https://raw.githubusercontent.com/Intermesh/groupoffice/master/scripts/sg_install.sh | bash
 
-
+ADD ./debian/etc/supervisor/conf.d/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 ENTRYPOINT ["docker-go-entrypoint.sh"]
 
-# clean up
-RUN apt-get purge -y --auto-remove debconf-utils dirmngr gnupg curl
