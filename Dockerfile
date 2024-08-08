@@ -65,7 +65,8 @@ ADD ./etc/apache2/sites-available/000-default.conf $APACHE_CONFDIR/sites-availab
 
 RUN mkdir -p /etc/groupoffice/multi_instance && chown -R www-data:www-data /etc/groupoffice
 #default group-office config
-ADD ./etc/groupoffice/config.php.tpl /usr/local/share/groupoffice-config.php.tpl
+ADD ./etc/groupoffice/docker-config.php.tpl /usr/local/share/groupoffice-docker-config.php.tpl
+ADD ./etc/groupoffice/config.php /etc/groupoffice/config.php
 
 #For persistant configuration
 VOLUME /etc/groupoffice
@@ -76,7 +77,7 @@ VOLUME /var/lib/groupoffice
 
 COPY docker-go-entrypoint.sh /usr/local/bin/
 
-ARG VERSION=6.8.61
+ARG VERSION=6.8.62
 ARG PACKAGE=groupoffice-$VERSION
 
 #Download package from GitHub
