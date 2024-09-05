@@ -1,6 +1,6 @@
 services:
   groupoffice:
-    image: intermesh/groupoffice:testing
+    image: intermesh/groupoffice:master
     restart: always
     ports:
       - "9000:80"
