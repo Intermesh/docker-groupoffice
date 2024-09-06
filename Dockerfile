@@ -3,8 +3,9 @@
 # To build test image:
 
 # Disable build kit to make docker compose use the local image
-# DOCKER_BUILDKIT=0 docker buildx build --load . -t intermesh/groupoffice:testing
-# DOCKER_BUILDKIT=0 docker compose build serviceusingtesting
+# DOCKER_BUILDKIT=0
+# DOCKER_BUILDKIT=0 && docker buildx build --load . -t intermesh/groupoffice:testing
+# docker compose build serviceusingtesting
 
 FROM php:8.3-apache
 
@@ -64,7 +65,8 @@ ADD ./etc/apache2/sites-available/000-default.conf $APACHE_CONFDIR/sites-availab
 
 RUN mkdir -p /etc/groupoffice/multi_instance && chown -R www-data:www-data /etc/groupoffice
 #default group-office config
-ADD ./etc/groupoffice/config.php.tpl /usr/local/share/groupoffice-config.php.tpl
+ADD ./etc/groupoffice/docker-config.php.tpl /usr/local/share/groupoffice-docker-config.php.tpl
+ADD ./etc/groupoffice/config.php /etc/groupoffice/config.php
 
 #For persistant configuration
 VOLUME /etc/groupoffice
@@ -75,7 +77,7 @@ VOLUME /var/lib/groupoffice
 
 COPY docker-go-entrypoint.sh /usr/local/bin/
 
-ARG VERSION=6.8.54
+ARG VERSION=6.8.69
 ARG PACKAGE=groupoffice-$VERSION
 
 #Download package from GitHub
