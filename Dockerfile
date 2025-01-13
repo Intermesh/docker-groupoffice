@@ -20,6 +20,8 @@ ENV MYSQL_HOST db
 EXPOSE 80
 EXPOSE 443
 
+ARG DEBIAN_FRONTEND=noninteractive
+
 # Install PHP build deps, Filesearch utils and mariadb-client is needed for mysqldump in multi_instance module
 RUN apt-get update --allow-releaseinfo-change
 RUN apt-get dist-upgrade -y 
@@ -77,7 +79,7 @@ VOLUME /var/lib/groupoffice
 
 COPY docker-go-entrypoint.sh /usr/local/bin/
 
-ARG VERSION=6.8.69
+ARG VERSION=25.0.1
 ARG PACKAGE=groupoffice-$VERSION
 
 #Download package from GitHub
