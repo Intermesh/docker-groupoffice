@@ -32,7 +32,7 @@ RUN apt-get install -y libxml2-dev libpng-dev libfreetype6-dev libjpeg62-turbo-d
 #sysvshm sysvsem sysvmsg pcntl are for z-push
 RUN	docker-php-ext-configure gd --with-freetype --with-jpeg && \
 	docker-php-ext-configure ldap && \
-    docker-php-ext-install soap pdo pdo_mysql calendar gd sysvshm sysvsem sysvmsg ldap opcache intl pcntl zip bcmath exif
+    docker-php-ext-install -j$(nproc) soap pdo pdo_mysql calendar gd sysvshm sysvsem sysvmsg ldap opcache intl pcntl zip bcmath exif
 
 RUN curl -sSLf \
         -o /usr/local/bin/install-php-extensions \
@@ -79,7 +79,7 @@ VOLUME /var/lib/groupoffice
 
 COPY docker-go-entrypoint.sh /usr/local/bin/
 
-ARG VERSION=25.0.1
+ARG VERSION=25.0.2
 ARG PACKAGE=groupoffice-$VERSION
 
 #Download package from GitHub
