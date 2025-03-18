@@ -3,7 +3,7 @@ services:
     image: intermesh/groupoffice:testing
     restart: always
     ports:
-      - "9080:80"
+      - "9090:80"
     links:
       - db
     volumes:
