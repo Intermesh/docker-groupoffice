@@ -1,6 +1,6 @@
 services:
   groupoffice:
-    image: intermesh/groupoffice:6.8
+    image: intermesh/groupoffice:master
     restart: always
     ports:
       - "9000:80"
@@ -19,7 +19,7 @@ services:
     env_file:
       - ./db.env     
   db:
-    image: mariadb:11.1
+    image: mariadb:11.1.2
     restart: always    
     env_file:
       - ./db.env

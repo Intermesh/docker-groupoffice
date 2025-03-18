@@ -20,19 +20,19 @@ ENV MYSQL_HOST db
 EXPOSE 80
 EXPOSE 443
 
-# Install PHP build deps, Filesearch utils and mariadb-client is needed for mysqldump in multi_instance module
-# dnsutils for maildomains module
+ARG DEBIAN_FRONTEND=noninteractive
 
+# Install PHP build deps, Filesearch utils and mariadb-client is needed for mysqldump in multi_instance module
 RUN apt-get update --allow-releaseinfo-change
 RUN apt-get dist-upgrade -y 
 RUN apt-get install -y libxml2-dev libpng-dev libfreetype6-dev libjpeg62-turbo-dev zip tnef ssl-cert libldap2-dev \
 	catdoc unzip tar imagemagick tesseract-ocr tesseract-ocr-eng poppler-utils exiv2 libzip-dev \
-	zlib1g-dev mariadb-client dnsutils
+	zlib1g-dev mariadb-client
 
 #sysvshm sysvsem sysvmsg pcntl are for z-push
 RUN	docker-php-ext-configure gd --with-freetype --with-jpeg && \
 	docker-php-ext-configure ldap && \
-    docker-php-ext-install soap pdo pdo_mysql calendar gd sysvshm sysvsem sysvmsg ldap opcache intl pcntl zip bcmath exif
+    docker-php-ext-install -j$(nproc) soap pdo pdo_mysql calendar gd sysvshm sysvsem sysvmsg ldap opcache intl pcntl zip bcmath exif
 
 RUN curl -sSLf \
         -o /usr/local/bin/install-php-extensions \
@@ -79,7 +79,7 @@ VOLUME /var/lib/groupoffice
 
 COPY docker-go-entrypoint.sh /usr/local/bin/
 
-ARG VERSION=6.8.109
+ARG VERSION=25.0.8
 ARG PACKAGE=groupoffice-$VERSION
 
 #Download package from GitHub
