@@ -79,7 +79,7 @@ VOLUME /var/lib/groupoffice
 
 COPY docker-go-entrypoint.sh /usr/local/bin/
 
-ARG VERSION=25.0.8
+ARG VERSION=25.0.9
 ARG PACKAGE=groupoffice-$VERSION
 
 #Download package from GitHub
