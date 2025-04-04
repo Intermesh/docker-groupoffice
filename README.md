@@ -41,6 +41,18 @@ On Linux create a file /etc/cron.d/groupoffice and add (replace /path/to/docker-
 
 ### Upgrading
 
+Check the image tag in your compose.yml for the current version. For example "intermesh/groupoffice:25.0".
+Make sure it's not on "latest". The reason is that you need to upgrade major releases step by step. A major release is when
+the first or second digit of the version increases. For example you can upgrade 25.0 to 25.1 but not 25.0 to 25.2.
+
+If you're doing a major release upgrade and you run the professional license then make sure to install the latest license key from your group-office.com account in the
+contracts section (https://www.group-office.com/account#account/contracts) if you run
+the professional version. This can be done via the browser GUI in the main menu -> register or via CLI:
+
+```
+docker compose exec -u www-data php ./www/cli.php core/System/setLicense --key=<YOURKEY>
+```
+
 Navigate in the folder with docker-compose.yml and pull the image:
 ```
 docker compose pull
