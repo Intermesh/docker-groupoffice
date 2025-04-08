@@ -9,10 +9,10 @@
 
 FROM php:8.3-apache
 
-ENV MYSQL_USER groupoffice
-ENV MYSQL_PASSWORD groupoffice
-ENV MYSQL_DATABASE groupoffice
-ENV MYSQL_HOST db
+ENV MYSQL_USER=groupoffice
+ENV MYSQL_PASSWORD=groupoffice
+ENV MYSQL_DATABASE=groupoffice
+ENV MYSQL_HOST=db
 
 #ENV APACHE_SERVER_NAME localhost
 #ENV APACHE_SERVER_ADMIN admin@localhost
