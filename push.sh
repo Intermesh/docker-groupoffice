@@ -1,6 +1,13 @@
 #!/bin/bash
 set -e
 
+# I prepared ubuntu for multi platform build with these commands ( see also https://docs.docker.com/build/building/multi-platform/):
+
+# docker run --privileged --rm tonistiigi/binfmt --install all
+# docker buildx rm builder
+# docker buildx create --name builder --driver docker-container --use
+# docker buildx inspect --bootstrap
+
 
 CONTENT=`cat Dockerfile`
 REGEX='VERSION=([0-9]+)\.([0-9]+)\.([0-9]+)';
