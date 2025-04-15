@@ -3,9 +3,8 @@
 # To build test image:
 
 # Disable build kit to make docker compose use the local image
-# DOCKER_BUILDKIT=0
-# DOCKER_BUILDKIT=0 && docker buildx build --load . -t intermesh/groupoffice:testing
-# docker compose build serviceusingtesting
+# DOCKER_BUILDKIT=0 && docker buildx build --load . -t intermesh/groupoffice:local
+# DOCKER_BUILDKIT=0 && docker compose build serviceusingtesting
 
 FROM php:8.3-apache
 
