@@ -1,6 +1,6 @@
 services:
   groupoffice:
-    image: intermesh/groupoffice:latest
+    image: intermesh/groupoffice:6.5
     restart: always
     ports:
       - "9090:80"
