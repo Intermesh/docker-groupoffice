@@ -73,11 +73,11 @@ VOLUME /var/lib/groupoffice
 
 COPY docker-go-entrypoint.sh /usr/local/bin/
 
-ARG VERSION=6.2.135
+ARG VERSION=6.2.134
 ARG PACKAGE=groupoffice-com-$VERSION-php-7.1
 
 #Download package from GitHub
-ADD https://sourceforge.net/projects/group-office/files/6.2/groupoffice-com-6.2.135-php-7.1.tar.gz/download /tmp/$PACKAGE.tar.gz
+ADD https://sourceforge.net/projects/group-office/files/6.2/$PACKAGE.tar.gz/download /tmp/$PACKAGE.tar.gz
 RUN tar zxvfC /tmp/$PACKAGE.tar.gz /tmp/
 RUN rm /tmp/$PACKAGE.tar.gz
 RUN mv /tmp/$PACKAGE /usr/local/share/groupoffice
