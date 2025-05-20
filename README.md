@@ -15,7 +15,7 @@ Clone this repository and run from inside the directory:
 docker compose up -d
 ````````````````````
 
-Then launch your browser to http://localhost:9000 and the Group-Office installer should appear.
+Then launch your browser to http://localhost:9090 and the Group-Office installer should appear.
 
 ### Cron job
 
