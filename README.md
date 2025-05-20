@@ -24,7 +24,7 @@ You should also configure a cron job on the host machine so that Group Office ca
 On Linux create a file /etc/cron.d/groupoffice and add (replace /path/to/docker-groupoffice):
 
 ```cron
-* * * * * root cd /path/to/docker-groupoffice && docker compose exec -T groupoffice php /usr/local/share/groupoffice/cron.php
+* * * * * root cd /path/to/docker-groupoffice && docker compose exec -u www-data -T groupoffice php /usr/local/share/groupoffice/cron.php
 ```
 
 > On MacOS I ran on the terminal:
@@ -36,7 +36,7 @@ On Linux create a file /etc/cron.d/groupoffice and add (replace /path/to/docker-
 > And added:
 >
 > ```bash
-> * * * * * cd /path/to/docker-groupoffice && docker compose exec -T groupoffice php /usr/local/share/groupoffice/cron.php
+> * * * * * cd /path/to/docker-groupoffice && docker compose exec -u www-data -T groupoffice php /usr/local/share/groupoffice/cron.php
 > ```
 
 ### Upgrading
