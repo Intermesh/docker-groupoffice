@@ -53,21 +53,29 @@ the professional version. This can be done via the browser GUI in the main menu 
 docker compose exec -u www-data php ./www/cli.php core/System/setLicense --key=<YOURKEY>
 ```
 
-Navigate in the folder with docker-compose.yml and pull the image:
+Navigate in the folder of this repo and checkout another branch:
+Check branches:
+
+```
+git branch -a
+```
+
+Select a version and checkout this branch:
+
+```
+git checkout VERSION
+```
+
+Pull the image:
 ```
 docker compose pull
 ```
 
-Bring the containers down:
-```
-docker compose down
-```
-
-Then start them again:
+Run the containers with the new image:
 ```
 docker compose up -d
 ```
-Then run http://localhost:9000/install/upgrade.php
+Then run http://localhost:9090/install/upgrade.php
 
 SSL Certificates
 ----------------
@@ -104,5 +112,5 @@ Using docker cli
 3. Run this command:
 
 ````
-docker run --name groupoffice -d -p 6380:80 -v ~/Projects/docker-groupoffice/data:/var/lib/groupoffice --link go_db:db intermesh/groupoffice
+docker run --name groupoffice -d -p 6380:80 -v ~/Projects/docker-groupoffice/data:/var/lib/groupoffice --link go_db:db intermesh/groupoffice:25.0
 ````
