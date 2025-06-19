@@ -6,7 +6,7 @@
 # DOCKER_BUILDKIT=0 && docker buildx build --load . -t intermesh/groupoffice:local
 # DOCKER_BUILDKIT=0 && docker compose build serviceusingtesting
 
-FROM php:8.3-apache
+FROM php:8.4-apache
 
 ENV MYSQL_USER=groupoffice
 ENV MYSQL_PASSWORD=groupoffice
