@@ -50,7 +50,7 @@ contracts section (https://www.group-office.com/account#account/contracts) if yo
 the professional version. This can be done via the browser GUI in the main menu -> register or via CLI:
 
 ```
-docker compose exec -u www-data php ./www/cli.php core/System/setLicense --key=<YOURKEY>
+docker compose exec -u www-data groupoffice php /usr/local/share/groupoffice/cli.php core/System/setLicense --key=<YOURKEY>
 ```
 
 Navigate in the folder of this repo and checkout another branch:
