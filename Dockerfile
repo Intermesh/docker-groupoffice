@@ -27,7 +27,7 @@ RUN apt-get update --allow-releaseinfo-change
 RUN apt-get dist-upgrade -y 
 RUN apt-get install -y libxml2-dev libpng-dev libfreetype6-dev libjpeg62-turbo-dev zip tnef ssl-cert libldap2-dev \
 	catdoc unzip tar imagemagick tesseract-ocr tesseract-ocr-eng poppler-utils exiv2 libzip-dev \
-	zlib1g-dev mariadb-client dnsutils
+	zlib1g-dev mariadb-client dnsutils libicu-dev
 
 #sysvshm sysvsem sysvmsg pcntl are for z-push
 RUN	docker-php-ext-configure gd --with-freetype --with-jpeg && \
@@ -79,7 +79,7 @@ VOLUME /var/lib/groupoffice
 
 COPY docker-go-entrypoint.sh /usr/local/bin/
 
-ARG VERSION=6.8.132
+ARG VERSION=6.8.133
 ARG PACKAGE=groupoffice-$VERSION
 
 #Download package from GitHub
