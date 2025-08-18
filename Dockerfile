@@ -7,12 +7,12 @@
 # DOCKER_BUILDKIT=0 && docker buildx build --load . -t intermesh/groupoffice:testing
 # docker compose build serviceusingtesting
 
-FROM php:8.3-apache
+FROM php:8.3-apache-bookworm
 
-ENV MYSQL_USER groupoffice
-ENV MYSQL_PASSWORD groupoffice
-ENV MYSQL_DATABASE groupoffice
-ENV MYSQL_HOST db
+ENV MYSQL_USER=groupoffice
+ENV MYSQL_PASSWORD=groupoffice
+ENV MYSQL_DATABASE=groupoffice
+ENV MYSQL_HOST=db
 
 #ENV APACHE_SERVER_NAME localhost
 #ENV APACHE_SERVER_ADMIN admin@localhost
@@ -26,7 +26,7 @@ EXPOSE 443
 RUN apt-get update --allow-releaseinfo-change
 RUN apt-get dist-upgrade -y 
 RUN apt-get install -y libxml2-dev libpng-dev libfreetype6-dev libjpeg62-turbo-dev zip tnef ssl-cert libldap2-dev \
-	catdoc unzip tar imagemagick tesseract-ocr tesseract-ocr-eng poppler-utils exiv2 libzip-dev \
+	catdoc unzip tar imagemagick tesseract-ocr tesseract-ocr-eng poppler-utils exiv2 libzip-dev libicu-dev \
 	zlib1g-dev mariadb-client dnsutils libicu-dev
 
 #sysvshm sysvsem sysvmsg pcntl are for z-push
