@@ -28,7 +28,7 @@ RUN apt-get update --allow-releaseinfo-change
 RUN apt-get dist-upgrade -y 
 RUN apt-get install -y libxml2-dev libpng-dev libfreetype6-dev libjpeg62-turbo-dev zip tnef ssl-cert libldap2-dev \
 	catdoc unzip tar imagemagick tesseract-ocr tesseract-ocr-eng poppler-utils exiv2 libzip-dev \
-	zlib1g-dev mariadb-client dnsutils
+	zlib1g-dev mariadb-client dnsutils libldap-common
 
 #sysvshm sysvsem sysvmsg pcntl are for z-push
 RUN	docker-php-ext-configure gd --with-freetype --with-jpeg && \
