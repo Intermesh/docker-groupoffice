@@ -23,7 +23,6 @@ docker pull php:8.3-apache
 docker login
 docker buildx build \
     --push --no-cache --platform linux/amd64,linux/arm64 \
-    -t intermesh/groupoffice:latest \
     -t intermesh/groupoffice:$major.$minor \
     -t intermesh/groupoffice:$major.$minor.$patch \
     .
