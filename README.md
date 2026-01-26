@@ -104,6 +104,14 @@ You can enable debug mode with this command on the host:
 docker compose exec groupoffice sed -i "s/config\['debug'\] = false;/config\['debug'\] = true;/" /etc/groupoffice/config.php
 ```
 
+Then you can read the debug log with this command on the host:
+
+```
+docker compose exec groupoffice tail -f /var/lib/groupoffice/log/debug.log
+```
+
+
+
 Using docker cli
 ----------------
 
