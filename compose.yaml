@@ -29,17 +29,6 @@ services:
     volumes:
       - "dbdata:/var/lib/mysql:cached"
 
-  #collabora:
-  #  image: collabora/code
-  #  environment:
-  #    extra_params: --o:ssl.enable=false
-  #  cap_add:
-  #    - MKNOD
-  #  ports:
-  #    - "9980:9980"
-  #  restart:
-  #    unless-stopped
-
 volumes:
   godata:
   goetc:

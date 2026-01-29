@@ -77,6 +77,17 @@ docker compose up -d
 ```
 Then run http://localhost:9090/install/upgrade.php
 
+### Collabora Online integration
+
+To enable Collabora Online integration you need to start the collabora container too with:
+
+```
+docker compose -f compose.yml -f collabora.yml up -d
+```
+
+See https://www.group-office.com/blog/2026/01/collabora-online-integration for a complete guide.
+
+
 SSL Certificates
 ----------------
 
