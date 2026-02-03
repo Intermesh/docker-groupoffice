@@ -4,9 +4,7 @@ services:
     environment:
       # For local testing only or behind a proxy that handles SSL
       extra_params: --o:ssl.enable=false
-    cap_add:
-      - MKNOD
     ports:
-      - "9981:9980"
+      - "9980:9980"
     restart:
       unless-stopped
