@@ -1,7 +1,7 @@
-Group-Office Docker image
+GroupOffice Docker image
 =========================
 
-Group-Office is an open source groupware system. More information can be found at https://www.group-office.com.
+GroupOffice is an open source groupware system. More information can be found at https://www.group-office.com.
 
 I recommend using this with docker compose.
 
@@ -15,7 +15,7 @@ Clone this repository and run from inside the directory:
 docker compose up -d
 ````````````````````
 
-Then launch your browser to http://localhost:9090 and the Group-Office installer should appear.
+Then launch your browser to http://localhost:9090 and the GroupOffice installer should appear.
 
 ### Cron job
 
@@ -106,7 +106,7 @@ SSLCertificateChainFile /etc/ssl/groupoffice/cabundle.crt
 
 HTTP Proxy
 ----------
-When using a HTTP proxy to forward requests to the Docker container you need to set some headers to tell Group-Office about the real hostname. Read more about this here: https://groupoffice.readthedocs.io/en/latest/install/extras/httpproxy.html
+When using a HTTP proxy to forward requests to the Docker container you need to set some headers to tell GroupOffice about the real hostname. Read more about this here: https://groupoffice.readthedocs.io/en/latest/install/extras/httpproxy.html
 
 Enable debug mode
 -----------------
