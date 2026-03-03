@@ -82,10 +82,26 @@ Then run http://localhost:9090/install/upgrade.php
 To enable Collabora Online integration you need to start the collabora container too with:
 
 ```
-docker compose -f compose.yml -f collabora.yml up -d
+docker compose -f compose.yaml -f compose.collabora.yaml up -d
 ```
 
 See https://www.group-office.com/blog/2026/01/collabora-online-integration for a complete guide.
+
+
+### Group-Office mailserver
+
+Spin off the GroupOffice mailserver container too:
+
+```
+docker compose -f compose.yml -f compose.mailserver.yml up -d
+```
+
+The mailserver needs the **maildomains** module to be installed. So login to the web interface and install it.
+
+Your mailserver is running IMAP (143, 993), SMTP (587, 25), Managesieve (4190). Internally the mailserver is
+reachable at hostname **mailserver**.
+
+
 
 
 SSL Certificates
