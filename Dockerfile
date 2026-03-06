@@ -89,9 +89,5 @@ RUN tar zxvfC /tmp/$PACKAGE.tar.gz /tmp/ \
     && rm /tmp/$PACKAGE.tar.gz \
     && mv /tmp/$PACKAGE /usr/local/share/groupoffice
 
-#Create studio subdirectory, make writable
-RUN mkdir -p /usr/local/share/groupoffice/go/modules/studio \
-    && chown -R www-data:www-data /usr/local/share/groupoffice/go/modules
-
 CMD ["apache2-foreground"]
 ENTRYPOINT ["docker-go-entrypoint.sh"]
