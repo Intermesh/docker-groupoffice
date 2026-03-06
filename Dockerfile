@@ -89,5 +89,7 @@ RUN tar zxvfC /tmp/$PACKAGE.tar.gz /tmp/ \
     && rm /tmp/$PACKAGE.tar.gz \
     && mv /tmp/$PACKAGE /usr/local/share/groupoffice
 
+WORKDIR /usr/local/share/groupoffice
+
 CMD ["apache2-foreground"]
 ENTRYPOINT ["docker-go-entrypoint.sh"]
