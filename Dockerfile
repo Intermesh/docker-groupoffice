@@ -22,15 +22,31 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update --allow-releaseinfo-change
 RUN apt-get dist-upgrade -y 
-RUN apt-get install -y libxml2-dev libpng-dev libfreetype6-dev libjpeg62-turbo-dev zip tnef ssl-cert libldap2-dev \
-	catdoc unzip tar imagemagick tesseract-ocr tesseract-ocr-eng poppler-utils exiv2 libzip-dev \
-	zlib1g-dev mariadb-client dnsutils libldap-common libicu-dev
+
+# needed for compiling
+RUN apt-get install -y libxml2-dev libpng-dev libfreetype6-dev libjpeg62-turbo-dev  libldap2-dev \
+	 libzip-dev zlib1g-dev libicu-dev
+
+# needed for  runtime
+RUN apt-get install -y catdoc unzip tar imagemagick tesseract-ocr tesseract-ocr-eng poppler-utils \
+    exiv2 zip tnef ssl-cert mariadb-client dnsutils libldap-common \
+    libzip5
 
 #sysvshm sysvsem sysvmsg pcntl are for z-push
 RUN	docker-php-ext-configure gd --with-freetype --with-jpeg
 RUN docker-php-ext-configure ldap
 
 RUN docker-php-ext-install -j$(nproc) soap pdo pdo_mysql calendar gd sysvshm sysvsem sysvmsg ldap intl pcntl zip bcmath exif
+
+# heif support
+RUN apt-get install -y \
+    libheif-dev \
+    libheif1 \
+    libmagickwand-dev \
+    libgomp1 \
+    imagemagick
+
+RUN pecl install imagick && docker-php-ext-enable imagick
 
 RUN curl -sSLf \
         -o /usr/local/bin/install-php-extensions \
@@ -46,10 +62,10 @@ RUN pecl install apcu
 RUN docker-php-ext-enable apcu
 
 # cleanup
-RUN apt purge -y binutils binutils-common cpp dpkg-dev g++ gcc icu-devtools \
-                libatomic1 libbinutils libcc1-0 libfreetype6-dev libicu-dev \
-                libitm1 libjpeg62-turbo-dev libldap2-dev liblsan0 libmpc3 libmpfr6 libpng-dev \
-                libpng-tools libubsan1 libxml2-dev patch --autoremove
+RUN apt purge -y binutils binutils-common cpp dpkg-dev g++ gcc \
+                libitm1 liblsan0 libmpc3 libmpfr6 \
+                libpng-tools libubsan1 libxml2-dev libpng-dev libfreetype6-dev libjpeg62-turbo-dev  libldap2-dev \
+                libzip-dev zlib1g-dev libicu-dev patch libmagickwand-dev libheif-dev --autoremove
 RUN apt clean
 RUN rm -rf /var/lib/apt/lists/*
 
