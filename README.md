@@ -75,7 +75,16 @@ Run the containers with the new image:
 ```
 docker compose up -d
 ```
-Then run http://localhost:9090/install/upgrade.php
+
+Then run the database upgrade:
+```
+docker compose exec -u www-data groupoffice /usr/local/share/groupoffice/cli.php core/System/upgrade
+```
+
+Or you can run that via the web UI:
+```
+http://localhost:9090/install/upgrade.php
+```
 
 ### Collabora Online integration
 
