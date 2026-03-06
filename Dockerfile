@@ -6,7 +6,7 @@
 # DOCKER_BUILDKIT=0 && docker buildx build --load . -t intermesh/groupoffice:local
 # DOCKER_BUILDKIT=0 && docker compose build serviceusingtesting
 
-FROM php:8.5-apache
+FROM php:8.4-apache
 
 ENV MYSQL_USER=groupoffice
 ENV MYSQL_DATABASE=groupoffice
@@ -96,7 +96,7 @@ VOLUME /var/lib/groupoffice
 
 COPY docker-go-entrypoint.sh /usr/local/bin/
 
-ARG VERSION=26.0.7
+ARG VERSION=26.0.12
 ARG PACKAGE=groupoffice-$VERSION
 
 #Download package from GitHub
