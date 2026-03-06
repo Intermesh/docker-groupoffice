@@ -78,7 +78,7 @@ docker compose up -d
 
 Then run the database upgrade:
 ```
-docker compose exec -u www-data groupoffice ./www/cli.php core/System/upgrade
+docker compose exec -u www-data groupoffice /usr/local/share/groupoffice/cli.php core/System/upgrade
 ```
 
 Or you can run that via the web UI:
