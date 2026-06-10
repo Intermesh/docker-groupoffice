@@ -80,12 +80,14 @@ VOLUME /etc/ssl/groupoffice
 COPY ./etc/php.ini $PHP_INI_DIR
 
 #configure apache
-ADD ./etc/apache2/sites-available/000-default.conf $APACHE_CONFDIR/sites-available/000-default.conf
+COPY ./etc/apache2/sites-available/000-default.conf $APACHE_CONFDIR/sites-available/000-default.conf
+
+#default group-office config
+COPY ./etc/groupoffice/docker-config.php.tpl /usr/local/share/groupoffice-docker-config.php.tpl
+COPY ./etc/groupoffice/config.php /usr/local/share/groupoffice-config.php
 
 RUN mkdir -p /etc/groupoffice/multi_instance && chown -R www-data:www-data /etc/groupoffice
-#default group-office config
-ADD ./etc/groupoffice/docker-config.php.tpl /usr/local/share/groupoffice-docker-config.php.tpl
-ADD ./etc/groupoffice/config.php /etc/groupoffice/config.php
+RUN cp -a /usr/local/share/groupoffice-config.php /etc/groupoffice/config.php
 
 #For persistant configuration
 VOLUME /etc/groupoffice
