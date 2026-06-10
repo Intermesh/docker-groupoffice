@@ -1,7 +1,7 @@
-Group-Office Docker image
+GroupOffice Docker image
 =========================
 
-Group-Office is an open source groupware system. More information can be found at https://www.group-office.com.
+GroupOffice is an open source groupware system. More information can be found at https://www.group-office.com.
 
 I recommend using this with docker compose.
 
@@ -15,7 +15,7 @@ Clone this repository and run from inside the directory:
 docker compose up -d
 ````````````````````
 
-Then launch your browser to http://localhost:9090 and the Group-Office installer should appear.
+Then launch your browser to http://localhost:9090 and the GroupOffice installer should appear.
 
 ### Cron job
 
@@ -75,7 +75,43 @@ Run the containers with the new image:
 ```
 docker compose up -d
 ```
-Then run http://localhost:9090/install/upgrade.php
+
+Then run the database upgrade:
+```
+docker compose exec -u www-data groupoffice /usr/local/share/groupoffice/cli.php core/System/upgrade
+```
+
+Or you can run that via the web UI:
+```
+http://localhost:9090/install/upgrade.php
+```
+
+### Collabora Online integration
+
+To enable Collabora Online integration you need to start the collabora container too with:
+
+```
+docker compose -f compose.yaml -f compose.collabora.yaml up -d
+```
+
+See https://www.group-office.com/blog/2026/01/collabora-online-integration for a complete guide.
+
+
+### Group-Office mailserver
+
+Spin off the GroupOffice mailserver container too:
+
+```
+docker compose -f compose.yml -f compose.mailserver.yml up -d
+```
+
+The mailserver needs the **maildomains** module to be installed. So login to the web interface and install it.
+
+Your mailserver is running IMAP (143, 993), SMTP (587, 25), Managesieve (4190). Internally the mailserver is
+reachable at hostname **mailserver**.
+
+
+
 
 SSL Certificates
 ----------------
@@ -95,7 +131,7 @@ SSLCertificateChainFile /etc/ssl/groupoffice/cabundle.crt
 
 HTTP Proxy
 ----------
-When using a HTTP proxy to forward requests to the Docker container you need to set some headers to tell Group-Office about the real hostname. Read more about this here: https://groupoffice.readthedocs.io/en/latest/install/extras/httpproxy.html
+When using a HTTP proxy to forward requests to the Docker container you need to set some headers to tell GroupOffice about the real hostname. Read more about this here: https://groupoffice.readthedocs.io/en/latest/install/extras/httpproxy.html
 
 Enable debug mode
 -----------------
@@ -103,6 +139,14 @@ You can enable debug mode with this command on the host:
 ```
 docker compose exec groupoffice sed -i "s/config\['debug'\] = false;/config\['debug'\] = true;/" /etc/groupoffice/config.php
 ```
+
+Then you can read the debug log with this command on the host:
+
+```
+docker compose exec groupoffice tail -f /var/lib/groupoffice/log/debug.log
+```
+
+
 
 Using docker cli
 ----------------
@@ -112,5 +156,5 @@ Using docker cli
 3. Run this command:
 
 ````
-docker run --name groupoffice -d -p 6380:80 -v ~/Projects/docker-groupoffice/data:/var/lib/groupoffice --link go_db:db intermesh/groupoffice:25.0
+docker run --name groupoffice -d -p 6380:80 -v ~/Projects/docker-groupoffice/data:/var/lib/groupoffice --link go_db:db intermesh/groupoffice:26.0
 ````

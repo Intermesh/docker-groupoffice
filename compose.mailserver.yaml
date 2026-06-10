@@ -1,0 +1,19 @@
+services:
+  mailserver:
+    image: intermesh/groupoffice-mailserver:latest
+    restart: always
+    ports:
+      - "143:143"
+      - "4190:4190"
+      - "25:25"
+      - "587:587"
+    env_file:
+      - ./db.env
+    environment:
+      POSTMASTER_EMAIL: admin@intermesh.localhost
+    volumes:
+      - vmail:/var/mail/vhosts:delegated
+    depends_on:
+      - "db"
+volumes:
+  vmail:
