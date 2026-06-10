@@ -82,10 +82,19 @@ COPY ./etc/php.ini $PHP_INI_DIR
 #configure apache
 COPY ./etc/apache2/sites-available/000-default.conf $APACHE_CONFDIR/sites-available/000-default.conf
 
-#default database connection config
-COPY ./etc/groupoffice/docker-config.php.tpl /usr/local/share/groupoffice-docker-config.php.tpl
 #default group-office config
+COPY ./etc/groupoffice/docker-config.php.tpl /usr/local/share/groupoffice-docker-config.php.tpl
 COPY ./etc/groupoffice/config.php /usr/local/share/groupoffice-config.php
+
+RUN mkdir -p /etc/groupoffice/multi_instance && chown -R www-data:www-data /etc/groupoffice
+RUN cp -a /usr/local/share/groupoffice-config.php /etc/groupoffice/config.php
+
+#For persistant configuration
+VOLUME /etc/groupoffice
+
+RUN mkdir -p /var/lib/groupoffice/multi_instance && chown -R www-data:www-data /var/lib/groupoffice
+#Group-Office data:
+VOLUME /var/lib/groupoffice
 
 COPY docker-go-entrypoint.sh /usr/local/bin/
 
