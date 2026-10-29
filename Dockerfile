@@ -27,13 +27,14 @@ RUN apt-get dist-upgrade -y
 RUN apt-get install -y libxml2-dev libpng-dev libfreetype6-dev libjpeg62-turbo-dev  libldap2-dev \
 	 libzip-dev zlib1g-dev libicu-dev
 
-# needed for  runtime
-RUN apt-get install -y catdoc unzip tar imagemagick tesseract-ocr tesseract-ocr-eng poppler-utils \
-    exiv2 zip tnef ssl-cert mariadb-client dnsutils libldap-common \
-    libzip5
+# needed for documents module
+# RUN apt-get install -y catdoc unzip tar imagemagick tesseract-ocr tesseract-ocr-eng poppler-utils exiv2
+
+# needed for runtime
+RUN apt-get install -y zip tnef ssl-cert mariadb-client dnsutils libldap-common libzip5
 
 #sysvshm sysvsem sysvmsg pcntl are for z-push
-RUN	docker-php-ext-configure gd --with-freetype --with-jpeg
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg
 RUN docker-php-ext-configure ldap
 
 RUN docker-php-ext-install -j$(nproc) soap pdo pdo_mysql calendar gd sysvshm sysvsem sysvmsg ldap intl pcntl zip bcmath exif
