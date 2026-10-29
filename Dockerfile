@@ -22,7 +22,9 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 # Everything is done in a single layer so that build dependencies, apt lists and
 # PHP sources that are removed at the end do not end up in the image.
-RUN apt-get update --allow-releaseinfo-change \
+# MAKEFLAGS makes pecl compile in parallel too
+RUN export MAKEFLAGS="-j$(nproc)" \
+    && apt-get update --allow-releaseinfo-change \
     && apt-get dist-upgrade -y \
     # needed for compiling
     && apt-get install -y libxml2-dev libpng-dev libfreetype6-dev libjpeg62-turbo-dev libldap2-dev \

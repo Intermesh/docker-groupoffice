@@ -8,6 +8,17 @@ set -e
 # docker buildx create --name builder --driver docker-container --use
 # docker buildx inspect --bootstrap
 
+# Compiling the PHP extensions for arm64 under QEMU emulation is very slow. Set ARM64_HOST to a docker host
+# running on arm64 to build that platform natively and in parallel with amd64, e.g.:
+# ARM64_HOST=ssh://user@arm-host ./push.sh
+BUILDER_ARGS=""
+if [ -n "$ARM64_HOST" ]; then
+    if ! docker buildx inspect native > /dev/null 2>&1; then
+        docker buildx create --name native --driver docker-container --platform linux/amd64
+        docker buildx create --name native --append --platform linux/arm64 "$ARM64_HOST"
+    fi
+    BUILDER_ARGS="--builder native"
+fi
 
 CONTENT=`cat Dockerfile`
 REGEX='VERSION=([0-9]+)\.([0-9]+)\.([0-9]+)';
@@ -19,8 +30,8 @@ minor=${BASH_REMATCH[2]};
 patch=${BASH_REMATCH[3]};
 
 docker login
-docker buildx build \
-    --push --pull --no-cache --platform linux/amd64,linux/arm64 \
+docker buildx build $BUILDER_ARGS \
+    --push --pull --platform linux/amd64,linux/arm64 \
     -t intermesh/groupoffice:latest \
     -t intermesh/groupoffice:$major.$minor \
     -t intermesh/groupoffice:$major.$minor.$patch \
