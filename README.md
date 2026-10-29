@@ -133,6 +133,23 @@ HTTP Proxy
 ----------
 When using a HTTP proxy to forward requests to the Docker container you need to set some headers to tell GroupOffice about the real hostname. Read more about this here: https://groupoffice.readthedocs.io/en/latest/install/extras/httpproxy.html
 
+Apache workers
+--------------
+Every Apache worker is a PHP process and long-running requests like push events (SSE) and ActiveSync each
+keep one busy. On startup the container sets `MaxRequestWorkers` based on its memory limit: 256MB is reserved
+and the rest is divided by an estimated 50MB per worker (minimum 10, maximum 1000). Limit the container memory
+to control it, or set these environment variables:
+
+- `APACHE_MAX_REQUEST_WORKERS`: use this exact number of workers.
+- `APACHE_WORKER_MEMORY`: the estimated memory per worker in MB (default 50).
+
+For example in compose.yaml:
+
+```yaml
+    environment:
+      APACHE_MAX_REQUEST_WORKERS: 100
+```
+
 Enable debug mode
 -----------------
 You can enable debug mode with this command on the host:
