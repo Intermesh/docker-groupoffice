@@ -8,7 +8,7 @@
 
 # Build stage: compiles the PHP extensions. Compilers, -dev packages and PHP sources stay in this stage
 # and never end up in the published image, so it can use as many layers as is convenient.
-FROM php:8.4-apache AS build
+FROM php:8.5-apache AS build
 
 ARG DEBIAN_FRONTEND=noninteractive
 
@@ -46,7 +46,7 @@ RUN find /usr/local/lib/php/extensions -name '*.so' -exec ldd {} + \
         > /runtime-packages.txt
 
 
-FROM php:8.4-apache
+FROM php:8.5-apache
 
 ENV MYSQL_USER=groupoffice
 ENV MYSQL_DATABASE=groupoffice
@@ -107,7 +107,7 @@ VOLUME /var/lib/groupoffice
 
 COPY docker-go-entrypoint.sh /usr/local/bin/
 
-ARG VERSION=26.0.56
+ARG VERSION=26.1.1
 ARG PACKAGE=groupoffice-$VERSION
 
 #Download package from GitHub. Streamed through tar so the tarball is not kept in a layer.

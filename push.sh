@@ -32,7 +32,7 @@ patch=${BASH_REMATCH[3]};
 docker login
 docker buildx build $BUILDER_ARGS \
     --push --pull --platform linux/amd64,linux/arm64 \
-    -t intermesh/groupoffice:latest \
+    -t intermesh/groupoffice:testing \
     -t intermesh/groupoffice:$major.$minor \
     -t intermesh/groupoffice:$major.$minor.$patch \
     .
